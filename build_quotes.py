@@ -244,14 +244,15 @@ class Quote:
         c = self.c
         h = 84
         x, top = MARGIN, self.y
-        c.setFillColor(BLACK)
-        c.roundRect(x, top - h, self.max_w, h, 10, fill=1, stroke=0)
+        on_yellow = HexColor("#6E6600")   # dark, readable text on yellow
         c.setFillColor(YELLOW)
+        c.roundRect(x, top - h, self.max_w, h, 10, fill=1, stroke=0)
+        c.setFillColor(INK)
         c.roundRect(x, top - h, 5, h, 2, fill=1, stroke=0)
-        c.setFillColor(FAINT)
-        c.setFont("Noto-Md", 9)
+        c.setFillColor(on_yellow)
+        c.setFont("Noto-Sb", 9)
         c.drawString(x + 24, top - 26, "TOTAL  \u00b7  " + q["package"])
-        c.setFillColor(WHITE)
+        c.setFillColor(INK)
         c.setFont("Noto-Sb", 10.5)
         # keep this line clear of the right-aligned price
         avail = self.max_w - 24 - 180
@@ -267,56 +268,45 @@ class Quote:
                 label = trial
             label = label + "\u2026"
         c.drawString(x + 24, top - 44, label)
-        c.setFillColor(MUTED if False else FAINT)
+        c.setFillColor(on_yellow)
         c.setFont("Noto", 8.5)
         c.drawString(x + 24, top - 62, "Delivery: " + q["timeline"])
         # price
-        c.setFillColor(YELLOW)
+        c.setFillColor(INK)
         c.setFont("Noto-Blk", 30)
         c.drawRightString(x + self.max_w - 24, top - 46, rupee(q["price"]))
-        c.setFillColor(FAINT)
+        c.setFillColor(on_yellow)
         c.setFont("Noto", 8.5)
         c.drawRightString(x + self.max_w - 24, top - 62, q["price_note"])
         self.y = top - h - 16
 
-    # ---- cover ----
-    def _cover(self):
+    # ---- intro block (top of first page) ----
+    def _intro(self):
         c = self.c
         q = self.q
-        c.setFillColor(BLACK)
-        c.rect(0, 0, PAGE_W, PAGE_H, fill=1, stroke=0)
-        # subtle top accent
-        c.setFillColor(YELLOW)
-        c.rect(0, PAGE_H - 6, PAGE_W, 6, fill=1, stroke=0)
-
-        logo_h = self._logo(MARGIN, PAGE_H - 68, 190)
-        c.setFillColor(FAINT)
-        c.setFont("Noto", 9)
-        c.drawString(MARGIN, PAGE_H - 68 - logo_h - 16, data.COMPANY["tagline"])
-
-        # Label
-        y = PAGE_H - 250
-        c.setFillColor(YELLOW)
-        c.setFont("Noto-Xb", 12)
-        c.drawString(MARGIN, y, "QUOTATION")
-        c.setFillColor(PANEL)
+        # Small label
+        c.setFillColor(MUTED)
+        c.setFont("Noto-Xb", 10)
+        c.drawString(MARGIN, self.y, "QUOTATION")
+        self.y -= 30
         # Title
-        y -= 58
-        c.setFillColor(WHITE)
-        c.setFont("Noto-Blk", 44)
-        c.drawString(MARGIN, y, q["title"])
-        y -= 30
-        c.setFillColor(YELLOW)
-        c.setFont("Noto-Bd", 18)
-        c.drawString(MARGIN, y, q["package"])
-        y -= 26
-        c.setFillColor(FAINT)
-        c.setFont("Noto", 11)
-        for ln in self._wrap(q["subtitle"], "Noto", 11, PAGE_W - 2 * MARGIN):
-            c.drawString(MARGIN, y, ln)
-            y -= 16
+        c.setFillColor(INK)
+        c.setFont("Noto-Blk", 30)
+        c.drawString(MARGIN, self.y, q["title"])
+        self.y -= 23
+        # Package + subtitle
+        c.setFillColor(INK)
+        c.setFont("Noto-Bd", 14)
+        c.drawString(MARGIN, self.y, q["package"])
+        self.y -= 17
+        c.setFillColor(MUTED)
+        c.setFont("Noto", 10.5)
+        for ln in self._wrap(q["subtitle"], "Noto", 10.5, self.max_w):
+            c.drawString(MARGIN, self.y, ln)
+            self.y -= 15
+        self.y -= 12
 
-        # Meta grid
+        # Meta strip (between two hairlines)
         today = date.today()
         valid = today + timedelta(days=data.TERMS["validity_days"])
         meta = [
@@ -325,39 +315,23 @@ class Quote:
             ("Valid until", valid.strftime("%d %b %Y")),
             ("Prepared for", data.CLIENT["company"]),
         ]
-        gy = 250
-        c.setStrokeColor(HexColor("#2A2A2A"))
-        c.setLineWidth(1)
-        c.line(MARGIN, gy + 24, PAGE_W - MARGIN, gy + 24)
-        colw = (PAGE_W - 2 * MARGIN) / 2
+        c.setStrokeColor(LINE)
+        c.setLineWidth(0.8)
+        c.line(MARGIN, self.y, PAGE_W - MARGIN, self.y)
+        self.y -= 16
+        colw = self.max_w / 4
         for i, (k, v) in enumerate(meta):
-            cx = MARGIN + (i % 2) * colw
-            cyy = gy - (i // 2) * 44
-            c.setFillColor(FAINT)
-            c.setFont("Noto-Md", 8.5)
-            c.drawString(cx, cyy, k.upper())
-            c.setFillColor(WHITE)
-            c.setFont("Noto-Sb", 12)
-            c.drawString(cx, cyy - 16, v)
-
-        # Price highlight
-        c.setFillColor(YELLOW)
-        c.setFont("Noto-Blk", 40)
-        c.drawString(MARGIN, 120, rupee(q["price"]))
-        c.setFillColor(FAINT)
-        c.setFont("Noto", 10)
-        pw = pdfmetrics.stringWidth(rupee(q["price"]), "Noto-Blk", 40)
-        c.drawString(MARGIN + pw + 12, 132, q["price_note"])
-        c.drawString(MARGIN + pw + 12, 118, "Delivery: " + q["timeline"])
-
-        # footer contact
-        c.setStrokeColor(HexColor("#2A2A2A"))
-        c.line(MARGIN, 70, PAGE_W - MARGIN, 70)
-        c.setFillColor(FAINT)
-        c.setFont("Noto", 8.5)
-        c.drawString(MARGIN, 54,
-                     "{email}   \u00b7   {phone}".format(**data.COMPANY))
-        c.drawRightString(PAGE_W - MARGIN, 54, data.COMPANY["website"])
+            cx = MARGIN + i * colw
+            c.setFillColor(MUTED)
+            c.setFont("Noto-Md", 8)
+            c.drawString(cx, self.y, k.upper())
+            c.setFillColor(INK)
+            c.setFont("Noto-Sb", 10.5)
+            c.drawString(cx, self.y - 15, v)
+        self.y -= 15 + 16
+        c.setStrokeColor(LINE)
+        c.line(MARGIN, self.y, PAGE_W - MARGIN, self.y)
+        self.y -= 4
 
     # ---- terms ----
     def _terms(self):
@@ -385,8 +359,8 @@ class Quote:
 
     # ---- orchestration ----
     def render(self):
-        self._cover()
-        self._new_content_page()
+        self._new_content_page(first=True)
+        self._intro()
         # Overview
         self._section_title("Overview")
         self._para(self.q["summary"], "Noto", 10.5, MARGIN, self.max_w, 15.5)

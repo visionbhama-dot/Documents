@@ -37,7 +37,7 @@ SUPPORT_ONE_YEAR = {
     "not_covered": [
         "New features, new pages or new modules",
         "Content changes - adding or editing text, images, tour "
-        "packages and blogs (you manage these from the admin panel)",
+        "packages or blogs",
         "Design changes or redesigns",
         "Third-party costs: hosting, domain, paid APIs or plugins",
     ],
@@ -71,7 +71,6 @@ QUOTATIONS = [
                     "Image gallery for destinations and tours",
                     "Enquiry form that sends submissions to your email",
                     "Click-to-call and WhatsApp enquiry buttons",
-                    "Google Maps location embed",
                     "Basic on-page SEO (titles, meta tags, image alt text)",
                     "Deployment to your domain / hosting",
                 ],
@@ -88,7 +87,7 @@ QUOTATIONS = [
                 ],
             },
         ],
-        "support": None,
+        "support": SUPPORT_ONE_YEAR,
     },
     {
         "id": "BV-Q-2026-002",
