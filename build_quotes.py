@@ -98,27 +98,38 @@ class Quote:
         return self.y
 
     # ---- page scaffolding ----
-    def _logo(self, x, top_y, w):
+    def _logo(self, x, top, box_w, box_h):
+        # Fit the logo inside a box, preserving aspect ratio; left aligned,
+        # vertically centred. Works for wide or square logos.
+        w = box_w
         h = w / self.logo_ratio
-        self.c.drawImage(self.logo, x, top_y - h, width=w, height=h,
-                         mask="auto")
-        return h
+        if h > box_h:
+            h = box_h
+            w = h * self.logo_ratio
+        yy = top - box_h + (box_h - h) / 2.0
+        self.c.drawImage(self.logo, x, yy, width=w, height=h, mask="auto")
+        return w, h
 
     def _content_header(self):
         c = self.c
-        band = 62
-        c.setFillColor(BLACK)
-        c.rect(0, PAGE_H - band, PAGE_W, band, fill=1, stroke=0)
-        c.setFillColor(YELLOW)
-        c.rect(0, PAGE_H - band, PAGE_W, 3, fill=1, stroke=0)
-        self._logo(MARGIN, PAGE_H - 20, 118)
-        c.setFillColor(FAINT)
+        band = 78
+        # Logo tile, top-left (renders the logo as-is on the white page)
+        self._logo(MARGIN, PAGE_H - 12, 54, 54)
+        # Right-aligned quotation meta
+        c.setFillColor(MUTED)
         c.setFont("Noto-Md", 8.5)
-        c.drawRightString(PAGE_W - MARGIN, PAGE_H - 32,
+        c.drawRightString(PAGE_W - MARGIN, PAGE_H - 34,
                           "QUOTATION  \u00b7  " + self.q["id"])
-        c.setFillColor(WHITE)
+        c.setFillColor(INK)
         c.setFont("Noto-Sb", 9.5)
-        c.drawRightString(PAGE_W - MARGIN, PAGE_H - 44, self.q["package"])
+        c.drawRightString(PAGE_W - MARGIN, PAGE_H - 48, self.q["package"])
+        # Divider under the header: hairline + short yellow accent
+        yline = PAGE_H - band
+        c.setStrokeColor(LINE)
+        c.setLineWidth(1)
+        c.line(MARGIN, yline, PAGE_W - MARGIN, yline)
+        c.setFillColor(YELLOW)
+        c.rect(MARGIN, yline - 1.5, 54, 3, fill=1, stroke=0)
 
     def _footer(self):
         c = self.c
@@ -141,7 +152,7 @@ class Quote:
         self.page += 1
         self._content_header()
         self._footer()
-        self.y = PAGE_H - 62 - 42
+        self.y = PAGE_H - 78 - 26
         self.x = MARGIN
         self.max_w = PAGE_W - 2 * MARGIN
 
