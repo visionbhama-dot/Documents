@@ -11,8 +11,8 @@ Edit this file to change prices, features, clients or terms, then run:
 COMPANY = {
     "name": "Bhama Vision",
     "tagline": "Websites, apps & AI for growing businesses",
-    "email": "hello@bhamavision.com",
-    "phone": "+91 00000 00000",
+    "email": "info@bhamavision.com",
+    "phone": "+91 88606 40250",
     "website": "www.bhamavision.com",
     "location": "India",
 }
