@@ -1,0 +1,7 @@
+__pycache__/
+*.pyc
+.venv/
+venv/
+_verify/
+assets/_logo_preview.png
+.DS_Store
