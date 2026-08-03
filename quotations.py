@@ -94,7 +94,7 @@ QUOTATIONS = [
         "package": "Full Website + Admin",
         "title": "Travel Website",
         "subtitle": "Frontend + backend with admin panel and 1 year support",
-        "price": 6999,
+        "price": 4999,
         "price_note": "one-time",
         "timeline": "12-15 working days",
         "summary": (

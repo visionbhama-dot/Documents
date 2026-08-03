@@ -27,7 +27,7 @@ PDFs are written to `output/`.
 | # | Package | Price | Support |
 | --- | --- | --- | --- |
 | BV-Q-2026-001 | Frontend Package (design-only, no backend) | ₹2,999 | — |
-| BV-Q-2026-002 | Full Website + Admin (blogs, tour packages, place categories like Manali/Shimla with images) | ₹6,999 | 1 year |
+| BV-Q-2026-002 | Full Website + Admin (blogs, tour packages, place categories like Manali/Shimla with images) | ₹4,999 | 1 year |
 
 **1 Year Support** covers bug fixes and anything that stops working (non-functional
 issues). It does **not** cover content changes, new features or redesigns.
