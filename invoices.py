@@ -12,18 +12,17 @@ from quotations import COMPANY  # noqa: F401  (re-exported for the renderer)
 
 # Where the money should be paid. Replace the placeholders with real details.
 PAYMENT = {
-    "account_name": "Bhama Vision",
-    "bank": "<Your Bank Name>",
-    "account_no": "<Account Number>",
-    "ifsc": "<IFSC Code>",
+    "account_name": "Prafull Kumar Sharma",
+    "bank": "IndusInd Bank",
+    "account_no": "158860640250",
+    "ifsc": "INDB0000044",
+    "upi": "8860640250@ybl",
 }
 
 # Invoice-wide terms.
 TERMS = {
-    "due_days": 7,          # due date = issue date + this many days
     "tax_percent": 0,       # set e.g. 18 to add an 18% GST line
     "notes": [
-        "Payment due within 7 days of the invoice date.",
         "Amounts are in Indian Rupees (INR). GST extra, if applicable.",
         "Please share the payment reference once the transfer is done.",
     ],
@@ -34,7 +33,7 @@ TERMS = {
 # ---------------------------------------------------------------------------
 INVOICES = [
     {
-        "id": "BV-INV-2026-001",
+        "id": "BV-INV-20260806-1800",
         "client": {
             "name": "Bharat iON Systems",
             "lines": [

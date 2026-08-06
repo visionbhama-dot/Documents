@@ -9,7 +9,7 @@ colours) with the quotation builder.
 """
 import os
 
-from datetime import date, timedelta
+from datetime import date
 
 from reportlab.lib.pagesizes import A4
 from reportlab.lib.colors import HexColor
@@ -146,11 +146,9 @@ class Invoice:
             yy -= 13
         # Right - meta
         today = date.today()
-        due = today + timedelta(days=data.TERMS["due_days"])
         meta = [
             ("Invoice No.", inv["id"]),
             ("Issue date", today.strftime("%d %b %Y")),
-            ("Due date", due.strftime("%d %b %Y")),
         ]
         my = top
         lbl_x = self.right - 200
@@ -276,6 +274,8 @@ class Invoice:
             "Account no.: " + p["account_no"],
             "IFSC: " + p["ifsc"],
         ]
+        if p.get("upi"):
+            lines.append("UPI: " + p["upi"])
         c.setFillColor(MUTED)
         c.setFont("Noto", 9.5)
         for ln in lines:

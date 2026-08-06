@@ -34,10 +34,10 @@ Current invoice:
 
 | # | Client | Line items | Total |
 | --- | --- | --- | --- |
-| BV-INV-2026-001 | Bharat iON Systems | Website Design (₹7,500) + Catalog/Portfolio/Quotation etc. (₹3,500) | ₹11,000 |
+| BV-INV-20260806-1800 | Bharat iON Systems | Website Design (₹7,500) + Catalog/Portfolio/Quotation etc. (₹3,500) | ₹11,000 |
 
-> Update the placeholder **bank details** in `PAYMENT` (inside `invoices.py`)
-> before sending. Set `tax_percent` there to add a GST line.
+> Give each new invoice a unique `id` in `invoices.py` (e.g. a date-based
+> number). Set `tax_percent` there to add a GST line.
 
 ## Current quotations (travel website)
 
