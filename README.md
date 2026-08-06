@@ -7,8 +7,10 @@ Dark cover + clean white content pages, yellow brand accent, and a replaceable l
 
 | File | Purpose |
 | --- | --- |
-| `quotations.py` | All content — company info, client, prices, features, terms. **Edit this.** |
-| `build_quotes.py` | Renderer that turns the data into A4 PDFs. |
+| `quotations.py` | Quotation content — company info, client, prices, features, terms. **Edit this.** |
+| `build_quotes.py` | Renderer that turns quotation data into A4 PDFs. |
+| `invoices.py` | Invoice content — client, line items, payment details, notes. **Edit this.** |
+| `build_invoices.py` | Renderer that turns invoice data into A4 PDFs. |
 | `assets/make_logo.py` | Generates a placeholder BhamaVision logo. |
 | `assets/logo.png` | The logo used on every document — **replace with your real logo**. |
 | `output/` | Generated PDFs. |
@@ -17,10 +19,25 @@ Dark cover + clean white content pages, yellow brand accent, and a replaceable l
 
 ```bash
 pip install -r requirements.txt
-python3 build_quotes.py
+python3 build_quotes.py     # quotations
+python3 build_invoices.py   # invoices
 ```
 
 PDFs are written to `output/`.
+
+## Invoices
+
+Invoices reuse the same Bhama Vision branding. Edit `invoices.py` (client,
+line items, payment details, notes) and run `python3 build_invoices.py`.
+
+Current invoice:
+
+| # | Client | Line items | Total |
+| --- | --- | --- | --- |
+| BV-INV-2026-001 | Bharat iON Systems | Website Design (₹7,500) + Catalog/Portfolio/Quotation etc. (₹3,500) | ₹11,000 |
+
+> Update the placeholder **bank details** in `PAYMENT` (inside `invoices.py`)
+> before sending. Set `tax_percent` there to add a GST line.
 
 ## Current quotations (travel website)
 
