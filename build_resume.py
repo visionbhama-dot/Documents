@@ -1,57 +1,43 @@
 """
 A4 PDF resume builder for Prafull Kumar Sharma.
 
-Clean two-column layout: main column (profile, experience, projects) and a
-light sidebar (skills, tools, education, personal). Yellow brand accent.
+Premium two-tone layout:
+- Full-height dark sidebar (contact, skills, software, education, languages,
+  personal) with a yellow monogram and yellow markers.
+- White main column (profile, experience, projects, services) with a teal
+  accent for a richer, non-monochrome look.
 
     python3 build_resume.py
 """
 import os
 
 from reportlab.lib.pagesizes import A4
+from reportlab.lib.colors import HexColor
 from reportlab.pdfbase import pdfmetrics
 from reportlab.pdfgen import canvas
 
-from build_quotes import (_register_fonts, PAGE_W, PAGE_H, INK, MUTED,
-                          YELLOW, LINE, CARD, OUTPUT)
+from build_quotes import _register_fonts, PAGE_W, PAGE_H, OUTPUT
 from resume import RESUME as R
 
-M = 44                                   # page margin
-PANEL_L = 366                            # sidebar panel left edge
-PANEL_R = PAGE_W - M                     # sidebar panel right edge
-SIDE_PAD = 16
-SIDE_X = PANEL_L + SIDE_PAD
-SIDE_W = PANEL_R - SIDE_PAD - SIDE_X
-MAIN_X = M
-MAIN_W = PANEL_L - 22 - MAIN_X
+# ---- palette (more than one accent) ----
+SLATE = HexColor("#1E2733")        # dark sidebar
+SLATE_LINE = HexColor("#39465A")   # sidebar dividers
+CLOUD = HexColor("#C4CCD8")        # sidebar body text
+CLOUD_DIM = HexColor("#8B94A3")    # sidebar labels
+WHITE = HexColor("#FFFFFF")
+YELLOW = HexColor("#F0E40A")       # brand accent (sidebar)
+TEAL = HexColor("#14B5A5")         # secondary accent (main column)
+INK = HexColor("#1F2733")          # main headings / text
+MUTED = HexColor("#6B7280")        # main secondary text
+HAIR = HexColor("#E5E8EC")         # light hairline
 
-
-def draw_icon(c, kind, x, y, s, col):
-    """Small vector contact icons drawn in an s x s box at (x, y)."""
-    c.saveState()
-    c.setStrokeColor(col)
-    c.setFillColor(col)
-    c.setLineWidth(1)
-    if kind == "phone":
-        c.roundRect(x + s * 0.22, y, s * 0.56, s, s * 0.14, stroke=1, fill=0)
-        c.circle(x + s * 0.5, y + s * 0.13, s * 0.05, stroke=0, fill=1)
-    elif kind == "mail":
-        h = s * 0.72
-        yy = y + (s - h) / 2
-        c.rect(x, yy, s, h, stroke=1, fill=0)
-        c.line(x, yy + h, x + s * 0.5, yy + h * 0.45)
-        c.line(x + s, yy + h, x + s * 0.5, yy + h * 0.45)
-    elif kind == "pin":
-        r = s * 0.32
-        cx = x + s * 0.5
-        cy = y + s - r
-        c.circle(cx, cy, r, stroke=1, fill=0)
-        p = c.beginPath()
-        p.moveTo(cx - r * 0.72, cy - r * 0.45)
-        p.lineTo(cx, y)
-        p.lineTo(cx + r * 0.72, cy - r * 0.45)
-        c.drawPath(p, stroke=1, fill=0)
-    c.restoreState()
+# ---- geometry ----
+M = 40
+PANEL_W = 196
+SIDE_X = 22
+SIDE_W = PANEL_W - SIDE_X - 20
+MAIN_X = PANEL_W + 28
+MAIN_W = (PAGE_W - M) - MAIN_X
 
 
 def wrap(text, font, size, max_w):
@@ -69,18 +55,30 @@ def wrap(text, font, size, max_w):
     return lines or [""]
 
 
+def draw_icon(c, kind, x, y, s, col):
+    c.saveState()
+    c.setStrokeColor(col)
+    c.setFillColor(col)
+    c.setLineWidth(1)
+    if kind == "phone":
+        c.roundRect(x + s * 0.22, y, s * 0.56, s, s * 0.14, stroke=1, fill=0)
+        c.circle(x + s * 0.5, y + s * 0.13, s * 0.05, stroke=0, fill=1)
+    elif kind == "pin":
+        r = s * 0.32
+        cx = x + s * 0.5
+        cy = y + s - r
+        c.circle(cx, cy, r, stroke=1, fill=0)
+        p = c.beginPath()
+        p.moveTo(cx - r * 0.72, cy - r * 0.45)
+        p.lineTo(cx, y)
+        p.lineTo(cx + r * 0.72, cy - r * 0.45)
+        c.drawPath(p, stroke=1, fill=0)
+    c.restoreState()
+
+
 class ResumeDoc:
     def __init__(self, c):
         self.c = c
-
-    def para(self, text, font, size, x, y, w, leading, color=INK):
-        c = self.c
-        c.setFillColor(color)
-        c.setFont(font, size)
-        for ln in wrap(text, font, size, w):
-            c.drawString(x, y, ln)
-            y -= leading
-        return y
 
     def _initials(self):
         parts = [p for p in R["name"].split() if p]
@@ -88,68 +86,79 @@ class ResumeDoc:
             return (parts[0][0] + parts[-1][0]).upper()
         return parts[0][:2].upper()
 
-    def heading(self, text, x, y, w):
+    # ---- section headings ----
+    def h_main(self, text, y):
         c = self.c
-        c.setFillColor(YELLOW)
-        c.rect(x, y - 0.5, 7, 7, fill=1, stroke=0)
+        c.setFillColor(TEAL)
+        c.rect(MAIN_X, y - 0.5, 7, 7, fill=1, stroke=0)
         c.setFillColor(INK)
         c.setFont("Noto-Xb", 11)
-        c.drawString(x + 13, y, text.upper())
+        c.drawString(MAIN_X + 13, y, text.upper())
         yl = y - 8
-        c.setStrokeColor(LINE)
+        c.setStrokeColor(HAIR)
         c.setLineWidth(1)
-        c.line(x, yl, x + w, yl)
+        c.line(MAIN_X, yl, MAIN_X + MAIN_W, yl)
+        c.setStrokeColor(TEAL)
+        c.setLineWidth(2)
+        c.line(MAIN_X, yl, MAIN_X + 34, yl)
         return y - 22
 
-    # ---- header ----
-    def header(self):
+    def h_side(self, text, y):
         c = self.c
-        band_bottom = PAGE_H - 122
-        # header band + top accent cap
-        c.setFillColor(CARD)
-        c.rect(0, band_bottom, PAGE_W, PAGE_H - band_bottom, fill=1, stroke=0)
         c.setFillColor(YELLOW)
-        c.rect(0, PAGE_H - 6, PAGE_W, 6, fill=1, stroke=0)
-        # monogram
-        cx, cy, r = M + 26, PAGE_H - 58, 26
-        c.setFillColor(YELLOW)
-        c.circle(cx, cy, r, stroke=0, fill=1)
-        c.setFillColor(INK)
-        c.setFont("Noto-Blk", 19)
-        c.drawCentredString(cx, cy - 7, self._initials())
-        # name + title
-        tx = cx + r + 18
-        c.setFillColor(INK)
-        c.setFont("Noto-Blk", 24)
-        c.drawString(tx, PAGE_H - 52, R["name"])
-        c.setFillColor(MUTED)
-        c.setFont("Noto-Md", 11.5)
-        c.drawString(tx, PAGE_H - 72, R["title"])
-        # contact row with icons
-        ct = R["contact"]
-        items = [("phone", ct["phone"]), ("mail", ct["email"]),
-                 ("pin", ct["location"])]
-        x = M
-        yb = PAGE_H - 102
-        for kind, text in items:
-            draw_icon(c, kind, x, yb - 1, 10, MUTED)
-            c.setFillColor(INK)
-            c.setFont("Noto", 9)
-            c.drawString(x + 15, yb, text)
-            x += 15 + pdfmetrics.stringWidth(text, "Noto", 9) + 26
-        return band_bottom - 24
+        c.rect(SIDE_X, y - 0.5, 7, 7, fill=1, stroke=0)
+        c.setFillColor(WHITE)
+        c.setFont("Noto-Xb", 10.5)
+        c.drawString(SIDE_X + 13, y, text.upper())
+        yl = y - 8
+        c.setStrokeColor(SLATE_LINE)
+        c.setLineWidth(1)
+        c.line(SIDE_X, yl, SIDE_X + SIDE_W, yl)
+        return y - 20
 
     # ---- main column ----
+    def main_header(self):
+        c = self.c
+        c.setFillColor(INK)
+        c.setFont("Noto-Blk", 23)
+        c.drawString(MAIN_X, PAGE_H - 56, R["name"])
+        c.setFillColor(TEAL)
+        c.setFont("Noto-Sb", 11.5)
+        c.drawString(MAIN_X, PAGE_H - 75, R["title"])
+        y = PAGE_H - 90
+        c.setStrokeColor(HAIR)
+        c.setLineWidth(1)
+        c.line(MAIN_X, y, MAIN_X + MAIN_W, y)
+        c.setStrokeColor(TEAL)
+        c.setLineWidth(2)
+        c.line(MAIN_X, y, MAIN_X + 48, y)
+        return y - 24
+
+    def bullet_main(self, text, y, size=10):
+        c = self.c
+        c.setFillColor(TEAL)
+        c.setFont("Noto-Bd", size)
+        c.drawString(MAIN_X + 2, y, "\u2022")
+        c.setFillColor(INK)
+        c.setFont("Noto", size)
+        for ln in wrap(text, "Noto", size, MAIN_W - 16):
+            c.drawString(MAIN_X + 15, y, ln)
+            y -= 14
+        return y
+
     def main_column(self, y):
         c = self.c
         # Profile
-        y = self.heading("Profile", MAIN_X, y, MAIN_W)
-        y = self.para(R["summary"], "Noto", 10, MAIN_X, y, MAIN_W, 14.5,
-                      color=INK)
+        y = self.h_main("Profile", y)
+        c.setFillColor(INK)
+        c.setFont("Noto", 10)
+        for ln in wrap(R["summary"], "Noto", 10, MAIN_W):
+            c.drawString(MAIN_X, y, ln)
+            y -= 14.5
         y -= 14
 
         # Experience
-        y = self.heading("Experience", MAIN_X, y, MAIN_W)
+        y = self.h_main("Experience", y)
         for job in R["experience"]:
             c.setFillColor(INK)
             c.setFont("Noto-Sb", 11)
@@ -159,42 +168,36 @@ class ResumeDoc:
                 c.setFont("Noto-Md", 8.5)
                 c.drawRightString(MAIN_X + MAIN_W, y, job["period"])
             y -= 13
-            c.setFillColor(MUTED)
+            c.setFillColor(TEAL)
             c.setFont("Noto-Md", 9.5)
             c.drawString(MAIN_X, y, job["org"])
-            y -= 14
+            y -= 15
             for p in job["points"]:
-                c.setFillColor(YELLOW)
-                c.setFont("Noto-Bd", 10)
-                c.drawString(MAIN_X + 2, y, "\u2022")
-                lines = wrap(p, "Noto", 10, MAIN_W - 16)
-                c.setFillColor(INK)
-                c.setFont("Noto", 10)
-                for ln in lines:
-                    c.drawString(MAIN_X + 15, y, ln)
-                    y -= 14
+                y = self.bullet_main(p, y)
                 y -= 3
-            y -= 10
+            y -= 9
 
         # Key Projects
-        y = self.heading("Key Projects", MAIN_X, y, MAIN_W)
+        y = self.h_main("Key Projects", y)
         for name, note in R["projects"]:
-            c.setFillColor(YELLOW)
+            c.setFillColor(TEAL)
             c.setFont("Noto-Bd", 10)
             c.drawString(MAIN_X + 2, y, "\u2022")
             c.setFillColor(INK)
             c.setFont("Noto-Sb", 10)
             c.drawString(MAIN_X + 15, y, name)
             nx = MAIN_X + 15 + pdfmetrics.stringWidth(name, "Noto-Sb", 10)
-            c.setFillColor(MUTED)
-            c.setFont("Noto", 10)
             note_txt = " - " + note
             if pdfmetrics.stringWidth(name + note_txt, "Noto-Sb", 10) \
                     < MAIN_W - 15:
+                c.setFillColor(MUTED)
+                c.setFont("Noto", 10)
                 c.drawString(nx, y, note_txt)
                 y -= 15
             else:
                 y -= 14
+                c.setFillColor(MUTED)
+                c.setFont("Noto", 10)
                 for ln in wrap(note, "Noto", 10, MAIN_W - 16):
                     c.drawString(MAIN_X + 15, y, ln)
                     y -= 14
@@ -202,110 +205,103 @@ class ResumeDoc:
         y -= 12
 
         # Core Services
-        y = self.heading("Core Services", MAIN_X, y, MAIN_W)
+        y = self.h_main("Core Services", y)
         for s in R["services"]:
-            c.setFillColor(YELLOW)
-            c.setFont("Noto-Bd", 10)
-            c.drawString(MAIN_X + 2, y, "\u2022")
-            c.setFillColor(INK)
-            c.setFont("Noto", 10)
-            for ln in wrap(s, "Noto", 10, MAIN_W - 16):
-                c.drawString(MAIN_X + 15, y, ln)
-                y -= 15
+            y = self.bullet_main(s, y)
+            y -= 1
         return y
 
     # ---- sidebar ----
-    def sidebar(self, top):
+    def sidebar(self):
         c = self.c
-        # panel background + yellow cap
-        c.setFillColor(CARD)
-        c.rect(PANEL_L, M, PANEL_R - PANEL_L, top - M, fill=1, stroke=0)
+        c.setFillColor(SLATE)
+        c.rect(0, 0, PANEL_W, PAGE_H, fill=1, stroke=0)
+        # monogram
+        cx, cy, r = PANEL_W / 2, PAGE_H - 60, 30
         c.setFillColor(YELLOW)
-        c.rect(PANEL_L, top - 4, PANEL_R - PANEL_L, 4, fill=1, stroke=0)
-        y = top - SIDE_PAD - 8
+        c.circle(cx, cy, r, stroke=0, fill=1)
+        c.setFillColor(SLATE)
+        c.setFont("Noto-Blk", 22)
+        c.drawCentredString(cx, cy - 8, self._initials())
+        y = PAGE_H - 118
+
+        # Contact
+        y = self.h_side("Contact", y)
+        for kind, text in [("phone", R["contact"]["phone"]),
+                           ("pin", R["contact"]["location"])]:
+            draw_icon(c, kind, SIDE_X, y - 1, 10, YELLOW)
+            c.setFillColor(CLOUD)
+            c.setFont("Noto", 9)
+            c.drawString(SIDE_X + 16, y, text)
+            y -= 16
+        y -= 12
 
         # Skills
-        y = self.heading("Skills", SIDE_X, y, SIDE_W)
+        y = self.h_side("Skills", y)
         for group, detail in R["skills"]:
-            c.setFillColor(INK)
+            c.setFillColor(WHITE)
             c.setFont("Noto-Sb", 9.5)
             c.drawString(SIDE_X, y, group)
             y -= 12
-            c.setFillColor(MUTED)
+            c.setFillColor(CLOUD)
             c.setFont("Noto", 8.5)
             for ln in wrap(detail, "Noto", 8.5, SIDE_W):
                 c.drawString(SIDE_X, y, ln)
                 y -= 11
-            y -= 6
+            y -= 7
+        y -= 5
 
-        y -= 4
-        # Strengths
-        y = self.heading("Strengths", SIDE_X, y, SIDE_W)
-        for s in R["strengths"]:
+        # Software
+        y = self.h_side("Software", y)
+        for s in R["software"]:
             c.setFillColor(YELLOW)
             c.setFont("Noto-Bd", 9)
             c.drawString(SIDE_X, y, "\u2022")
-            c.setFillColor(INK)
+            c.setFillColor(CLOUD)
             c.setFont("Noto", 9)
-            for ln in wrap(s, "Noto", 9, SIDE_W - 13):
-                c.drawString(SIDE_X + 12, y, ln)
-                y -= 11.5
-            y -= 4
-        y -= 4
-
-        # Software
-        y = self.heading("Software", SIDE_X, y, SIDE_W)
-        c.setFont("Noto", 9.5)
-        for s in R["software"]:
-            c.setFillColor(YELLOW)
-            c.setFont("Noto-Bd", 9.5)
-            c.drawString(SIDE_X, y, "\u2022")
-            c.setFillColor(INK)
-            c.setFont("Noto", 9.5)
             c.drawString(SIDE_X + 13, y, s)
             y -= 14
-        y -= 6
+        y -= 11
 
         # Education
-        y = self.heading("Education", SIDE_X, y, SIDE_W)
+        y = self.h_side("Education", y)
         for title, place in R["education"]:
-            c.setFillColor(INK)
+            c.setFillColor(WHITE)
             c.setFont("Noto-Sb", 9.5)
             for ln in wrap(title, "Noto-Sb", 9.5, SIDE_W):
                 c.drawString(SIDE_X, y, ln)
                 y -= 12
-            c.setFillColor(MUTED)
+            c.setFillColor(CLOUD)
             c.setFont("Noto", 8.5)
             for ln in wrap(place, "Noto", 8.5, SIDE_W):
                 c.drawString(SIDE_X, y, ln)
                 y -= 11
-            y -= 6
-        y -= 4
+            y -= 7
+        y -= 5
 
         # Languages
-        y = self.heading("Languages", SIDE_X, y, SIDE_W)
-        c.setFillColor(INK)
+        y = self.h_side("Languages", y)
+        c.setFillColor(CLOUD)
         c.setFont("Noto", 9.5)
         c.drawString(SIDE_X, y, ", ".join(R["languages"]))
         y -= 18
-        y -= 4
+        y -= 5
 
         # Personal
-        y = self.heading("Personal", SIDE_X, y, SIDE_W)
+        y = self.h_side("Personal", y)
         for k, v in R["personal"]:
-            c.setFillColor(MUTED)
-            c.setFont("Noto-Md", 8.5)
+            c.setFillColor(CLOUD_DIM)
+            c.setFont("Noto-Md", 8)
             c.drawString(SIDE_X, y, k.upper())
-            c.setFillColor(INK)
+            c.setFillColor(WHITE)
             c.setFont("Noto-Sb", 9.5)
             c.drawString(SIDE_X, y - 12, v)
             y -= 26
-        return y
 
     def render(self):
-        y_cols = self.header()
-        self.sidebar(y_cols + 12)
-        self.main_column(y_cols)
+        self.sidebar()
+        y = self.main_header()
+        self.main_column(y)
 
 
 def build():

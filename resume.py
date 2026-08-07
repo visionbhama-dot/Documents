@@ -10,8 +10,7 @@ RESUME = {
     "title": "Digital Marketing & Web Development Specialist",
     "contact": {
         "phone": "+91 88606 40250",
-        "email": "info@bhamavision.com",
-        "location": "India",
+        "location": "Delhi, India",
     },
 
     "summary": (
@@ -106,6 +105,6 @@ RESUME = {
 
     "personal": [
         ("Date of Birth", "08 July 2000"),
-        ("Location", "India"),
+        ("Nationality", "Indian"),
     ],
 }
