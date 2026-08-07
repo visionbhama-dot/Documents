@@ -26,6 +26,34 @@ MAIN_X = M
 MAIN_W = PANEL_L - 22 - MAIN_X
 
 
+def draw_icon(c, kind, x, y, s, col):
+    """Small vector contact icons drawn in an s x s box at (x, y)."""
+    c.saveState()
+    c.setStrokeColor(col)
+    c.setFillColor(col)
+    c.setLineWidth(1)
+    if kind == "phone":
+        c.roundRect(x + s * 0.22, y, s * 0.56, s, s * 0.14, stroke=1, fill=0)
+        c.circle(x + s * 0.5, y + s * 0.13, s * 0.05, stroke=0, fill=1)
+    elif kind == "mail":
+        h = s * 0.72
+        yy = y + (s - h) / 2
+        c.rect(x, yy, s, h, stroke=1, fill=0)
+        c.line(x, yy + h, x + s * 0.5, yy + h * 0.45)
+        c.line(x + s, yy + h, x + s * 0.5, yy + h * 0.45)
+    elif kind == "pin":
+        r = s * 0.32
+        cx = x + s * 0.5
+        cy = y + s - r
+        c.circle(cx, cy, r, stroke=1, fill=0)
+        p = c.beginPath()
+        p.moveTo(cx - r * 0.72, cy - r * 0.45)
+        p.lineTo(cx, y)
+        p.lineTo(cx + r * 0.72, cy - r * 0.45)
+        c.drawPath(p, stroke=1, fill=0)
+    c.restoreState()
+
+
 def wrap(text, font, size, max_w):
     words, lines, cur = text.split(), [], ""
     for w in words:
@@ -54,43 +82,62 @@ class ResumeDoc:
             y -= leading
         return y
 
+    def _initials(self):
+        parts = [p for p in R["name"].split() if p]
+        if len(parts) >= 2:
+            return (parts[0][0] + parts[-1][0]).upper()
+        return parts[0][:2].upper()
+
     def heading(self, text, x, y, w):
         c = self.c
+        c.setFillColor(YELLOW)
+        c.rect(x, y - 0.5, 7, 7, fill=1, stroke=0)
         c.setFillColor(INK)
-        c.setFont("Noto-Xb", 10.5)
-        c.drawString(x, y, text.upper())
-        yl = y - 7
+        c.setFont("Noto-Xb", 11)
+        c.drawString(x + 13, y, text.upper())
+        yl = y - 8
         c.setStrokeColor(LINE)
         c.setLineWidth(1)
         c.line(x, yl, x + w, yl)
-        c.setFillColor(YELLOW)
-        c.rect(x, yl - 1.5, 30, 3, fill=1, stroke=0)
         return y - 22
 
     # ---- header ----
     def header(self):
         c = self.c
-        c.setFillColor(INK)
-        c.setFont("Noto-Blk", 27)
-        c.drawString(M, PAGE_H - 62, R["name"])
-        c.setFillColor(MUTED)
-        c.setFont("Noto-Md", 12)
-        c.drawString(M, PAGE_H - 82, R["title"])
-        # contact line
-        ct = R["contact"]
-        contact = "   \u00b7   ".join(
-            [ct["phone"], ct["email"], ct["website"], ct["location"]])
-        c.setFillColor(INK)
-        c.setFont("Noto", 9)
-        c.drawString(M, PAGE_H - 100, contact)
-        # accent rule
-        y = PAGE_H - 114
-        c.setStrokeColor(LINE)
-        c.setLineWidth(1)
-        c.line(M, y, PAGE_W - M, y)
+        band_bottom = PAGE_H - 122
+        # header band + top accent cap
+        c.setFillColor(CARD)
+        c.rect(0, band_bottom, PAGE_W, PAGE_H - band_bottom, fill=1, stroke=0)
         c.setFillColor(YELLOW)
-        c.rect(M, y - 2, 64, 4, fill=1, stroke=0)
-        return y - 26
+        c.rect(0, PAGE_H - 6, PAGE_W, 6, fill=1, stroke=0)
+        # monogram
+        cx, cy, r = M + 26, PAGE_H - 58, 26
+        c.setFillColor(YELLOW)
+        c.circle(cx, cy, r, stroke=0, fill=1)
+        c.setFillColor(INK)
+        c.setFont("Noto-Blk", 19)
+        c.drawCentredString(cx, cy - 7, self._initials())
+        # name + title
+        tx = cx + r + 18
+        c.setFillColor(INK)
+        c.setFont("Noto-Blk", 24)
+        c.drawString(tx, PAGE_H - 52, R["name"])
+        c.setFillColor(MUTED)
+        c.setFont("Noto-Md", 11.5)
+        c.drawString(tx, PAGE_H - 72, R["title"])
+        # contact row with icons
+        ct = R["contact"]
+        items = [("phone", ct["phone"]), ("mail", ct["email"]),
+                 ("pin", ct["location"])]
+        x = M
+        yb = PAGE_H - 102
+        for kind, text in items:
+            draw_icon(c, kind, x, yb - 1, 10, MUTED)
+            c.setFillColor(INK)
+            c.setFont("Noto", 9)
+            c.drawString(x + 15, yb, text)
+            x += 15 + pdfmetrics.stringWidth(text, "Noto", 9) + 26
+        return band_bottom - 24
 
     # ---- main column ----
     def main_column(self, y):
@@ -170,10 +217,12 @@ class ResumeDoc:
     # ---- sidebar ----
     def sidebar(self, top):
         c = self.c
-        # panel background
+        # panel background + yellow cap
         c.setFillColor(CARD)
         c.rect(PANEL_L, M, PANEL_R - PANEL_L, top - M, fill=1, stroke=0)
-        y = top - SIDE_PAD - 4
+        c.setFillColor(YELLOW)
+        c.rect(PANEL_L, top - 4, PANEL_R - PANEL_L, 4, fill=1, stroke=0)
+        y = top - SIDE_PAD - 8
 
         # Skills
         y = self.heading("Skills", SIDE_X, y, SIDE_W)

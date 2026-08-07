@@ -11,7 +11,6 @@ RESUME = {
     "contact": {
         "phone": "+91 88606 40250",
         "email": "info@bhamavision.com",
-        "website": "www.bhamavision.com",
         "location": "India",
     },
 
