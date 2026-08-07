@@ -11,6 +11,8 @@ Dark cover + clean white content pages, yellow brand accent, and a replaceable l
 | `build_quotes.py` | Renderer that turns quotation data into A4 PDFs. |
 | `invoices.py` | Invoice content — client, line items, payment details, notes. **Edit this.** |
 | `build_invoices.py` | Renderer that turns invoice data into A4 PDFs. |
+| `resume.py` | Resume content — profile, experience, projects, skills. **Edit this.** |
+| `build_resume.py` | Renderer that turns resume data into an A4 PDF. |
 | `assets/make_logo.py` | Generates a placeholder BhamaVision logo. |
 | `assets/logo.png` | The logo used on every document — **replace with your real logo**. |
 | `output/` | Generated PDFs. |
@@ -21,6 +23,7 @@ Dark cover + clean white content pages, yellow brand accent, and a replaceable l
 pip install -r requirements.txt
 python3 build_quotes.py     # quotations
 python3 build_invoices.py   # invoices
+python3 build_resume.py     # resume
 ```
 
 PDFs are written to `output/`.
@@ -38,6 +41,12 @@ Current invoice:
 
 > Give each new invoice a unique `id` in `invoices.py` (e.g. a date-based
 > number). Set `tax_percent` there to add a GST line.
+
+## Resume
+
+A clean, two-column A4 resume for Prafull Kumar Sharma. Edit `resume.py`
+(profile, experience, projects, skills, education, personal) and run
+`python3 build_resume.py`. Output: `output/Prafull-Kumar-Sharma-Resume.pdf`.
 
 ## Current quotations (travel website)
 
