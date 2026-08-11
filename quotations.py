@@ -17,29 +17,34 @@ COMPANY = {
     "location": "India",
 }
 
-# Client the quotation is prepared for. Update per customer.
+# Client the quotation is prepared for.
+# Customer / agency name is intentionally left out of the document.
 CLIENT = {
     "name": "Prospective Client",
-    "company": "Travel Business",
-    "note": "Travel & tourism website",
+    "company": "Confidential",
+    "note": "Creator clipping & campaigns platform",
 }
 
-# Shared support policy for packages that include support.
-SUPPORT_ONE_YEAR = {
-    "title": "1 Year Support - included",
+# Requirements box shown on each quotation. Two columns:
+#   left  (highlighted) = what Bhama Vision builds & delivers
+#   right (muted)       = third-party subscriptions arranged by the client
+REQUIREMENTS = {
+    "title": "Scope & requirements",
+    "left_label": "Delivered by Bhama Vision",
+    "right_label": "On client's side (third-party)",
     "covered": [
-        "Fixing bugs and errors in the delivered features",
-        "Repairing anything that stops working - forms, buttons, "
-        "links, and admin actions (non-functional issues)",
-        "Deployment / hosting issues for the delivered website",
-        "Best-effort response within 1-2 business days",
+        "Complete UI/UX design & development",
+        "Setup of database and all data models",
+        "Integration of the third-party services listed alongside",
+        "Deployment to the client's hosting + handover",
+        "Testing and bug fixing before launch",
     ],
     "not_covered": [
-        "New features, new pages or new modules",
-        "Content changes - adding or editing text, images, tour "
-        "packages or blogs",
-        "Design changes or redesigns",
-        "Third-party costs: hosting, domain, paid APIs or plugins",
+        "Domain and web hosting / server",
+        "Payment gateway account and its transaction fees",
+        "Email / OTP sending service subscription",
+        "Social media API access & keys (for view tracking)",
+        "SMS / KYC service, and any other paid API or plugin",
     ],
 }
 
@@ -49,87 +54,88 @@ SUPPORT_ONE_YEAR = {
 QUOTATIONS = [
     {
         "id": "BV-Q-2026-001",
-        "package": "Frontend Package",
-        "title": "Travel Website",
-        "subtitle": "Design-only frontend website (no admin backend)",
-        "price": 2999,
-        "price_note": "one-time",
-        "timeline": "5-7 working days",
+        "package": "Complete Platform",
+        "title": "Creator Clipping Platform",
+        "subtitle": "Website + Creator dashboard + Brand dashboard + Admin panel",
+        "price": 30000,
+        "price_note": "one-time (design & development)",
+        "timeline": "30-40 working days",
         "summary": (
-            "A fast, modern, mobile-friendly travel website that showcases "
-            "your destinations and tours. Content is fixed at build time - "
-            "there is no admin panel, so updates are handled by us or in a "
-            "future upgrade to the backend package."
+            "A complete clipping & campaigns platform. Brands post campaigns "
+            "and pay creators per 1,000 views; creators clip content, post it "
+            "on social media, submit the link and earn. Includes the public "
+            "website, separate dashboards for creators and brands, and an "
+            "admin panel to control everything."
         ),
         "sections": [
             {
-                "heading": "What's included",
+                "heading": "What we will design & develop",
                 "items": [
-                    "Responsive multi-page website (mobile, tablet & desktop)",
-                    "Pages: Home, Destinations, Tours, About, Contact",
-                    "Modern UI designed to match your brand",
-                    "Image gallery for destinations and tours",
-                    "Enquiry form that sends submissions to your email",
-                    "Click-to-call and WhatsApp enquiry buttons",
-                    "Basic on-page SEO (titles, meta tags, image alt text)",
-                    "Deployment to your domain / hosting",
+                    "Public website: landing page, discover campaigns, FAQ, contact",
+                    "Sign up & login with email + password + OTP verification",
+                    "Creator dashboard: browse & join campaigns, submit post "
+                    "links, wallet, earnings, payout methods, profile",
+                    "Brand dashboard: create & manage campaigns, buy points, "
+                    "set pay-rate per 1,000 views, review submissions "
+                    "(approve / reject / flag), analytics",
+                    "Admin panel: manage users, campaigns, flagged "
+                    "submissions, points & payouts, and reports",
+                    "Payment integration - brands buy points, creators get payouts",
+                    "View tracking for submitted clips",
+                    "Fully responsive across mobile, tablet & desktop",
+                ],
+            },
+        ],
+        "support": REQUIREMENTS,
+    },
+    {
+        "id": "BV-Q-2026-002",
+        "package": "Website + Admin",
+        "title": "Creator Clipping Platform",
+        "subtitle": "Website frontend + one admin panel (no creator/brand dashboards)",
+        "price": 20000,
+        "price_note": "one-time (design & development)",
+        "timeline": "18-25 working days",
+        "summary": (
+            "The public website plus a single admin panel that controls "
+            "everything - campaigns, users, submissions and payments - from "
+            "one place. There are no separate dashboards for creators or "
+            "brands in this package."
+        ),
+        "sections": [
+            {
+                "heading": "What we will design & develop",
+                "items": [
+                    "Public website: landing page, discover campaigns, FAQ, contact",
+                    "Sign up & login with email + password + OTP verification",
+                    "One admin panel to control everything: campaigns, users, "
+                    "submissions (approve / reject / flag), points & payouts, "
+                    "and site content",
+                    "Payment and view-tracking integration as required",
+                    "Fully responsive across mobile, tablet & desktop",
                 ],
             },
             {
                 "heading": "Not included in this package",
                 "muted": True,
                 "items": [
-                    "Admin panel / content management",
-                    "Dynamic blogs, tour packages or place categories",
-                    "Image uploads and self-service editing",
-                    "(All of the above are covered by the Full Website "
-                    "package below.)",
+                    "Separate creator dashboard",
+                    "Separate brand dashboard",
+                    "(Both are covered by the Complete Platform package.)",
                 ],
             },
         ],
-        "support": SUPPORT_ONE_YEAR,
-    },
-    {
-        "id": "BV-Q-2026-002",
-        "package": "Full Website + Admin",
-        "title": "Travel Website",
-        "subtitle": "Frontend + backend with admin panel and 1 year support",
-        "price": 4999,
-        "price_note": "one-time",
-        "timeline": "12-15 working days",
-        "summary": (
-            "A complete, self-manageable travel website. You get everything "
-            "in the frontend package plus a secure admin panel to manage "
-            "blogs, tour packages and place categories (such as Manali, "
-            "Shimla and more) with images - all without touching code."
-        ),
-        "sections": [
-            {
-                "heading": "Everything in the Frontend Package, plus",
-                "items": [
-                    "Secure admin panel with login",
-                    "Blogs: create, edit and delete posts with images",
-                    "Tour packages: pricing, itinerary, highlights & images",
-                    "Place categories (Manali, Shimla, etc.) - each with "
-                    "images and description, with tours & blogs grouped under them",
-                    "Image upload and media management",
-                    "Dynamic listing pages driven by your database",
-                    "Enquiries saved in the admin panel + email notification",
-                    "SEO-friendly dynamic pages",
-                ],
-            },
-        ],
-        "support": SUPPORT_ONE_YEAR,
+        "support": REQUIREMENTS,
     },
 ]
 
 # Terms shown on the closing page of every quotation.
 TERMS = {
     "validity_days": 15,
-    "payment": "50% advance to start, 50% on delivery (or as mutually agreed).",
+    "payment": "40% advance to start, 30% at midway, 30% on delivery (or as mutually agreed).",
     "notes": [
-        "All prices are in Indian Rupees (INR) and are one-time unless stated.",
-        "Hosting, domain and any paid third-party services are billed at actuals.",
+        "All prices are in Indian Rupees (INR) and are one-time for the design & development work quoted.",
+        "All third-party subscriptions (hosting, domain, payment gateway, email/OTP, social media APIs, SMS/KYC) are arranged and paid for by the client directly.",
         "Timelines begin once content, access and the advance payment are received.",
         "Prices are exclusive of GST, if applicable.",
     ],
