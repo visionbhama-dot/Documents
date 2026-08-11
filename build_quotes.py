@@ -203,13 +203,15 @@ class Quote:
         # measure height needed
         self._ensure(150)
         top = self.y
-        # Covered card
-        self._two_col_card(MARGIN, top, col_w, "Covered",
+        # Left / highlighted card
+        left_label = support.get("left_label", "Covered")
+        right_label = support.get("right_label", "Not covered")
+        self._two_col_card(MARGIN, top, col_w, left_label,
                            support["covered"], YELLOW, INK)
         h1 = self._card_height(support["covered"], col_w)
-        # Not covered card
+        # Right / muted card
         self._two_col_card(MARGIN + col_w + col_gap, top, col_w,
-                           "Not covered", support["not_covered"],
+                           right_label, support["not_covered"],
                            HexColor("#C9C9C9"), MUTED)
         h2 = self._card_height(support["not_covered"], col_w)
         self.y = top - max(h1, h2) - 14
