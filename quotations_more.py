@@ -2,8 +2,7 @@
 Bhama Vision - additional quotations bundle.
 
   1. College Admission Portal (with backend)          -> Rs 9,999
-  1b. College Website (informative, no admission portal) -> Rs 4,999  (PLACEHOLDER - confirm)
-  1c. College Website + Admin (no admission portal)       -> Rs 6,999  (PLACEHOLDER - confirm)
+  1b. College Website (front-end + backend)            -> Rs 7,999
   2. Clothing Brand E-commerce (custom code)           -> Rs 12,999
   3. Connectify - Brand x Influencer matchmaking       -> Rs 3,499
 
@@ -52,27 +51,8 @@ REQ_COLLEGE_WEB = {
     "left_label": "Delivered by Bhama Vision",
     "right_label": "On client's side (third-party)",
     "covered": [
-        "Complete, responsive website design & development of all pages",
-        "Enquiry / contact form and Google Map embed",
-        "Basic on-page SEO setup",
-        "Deployment to the client's hosting + handover",
-        "Testing and bug fixing before launch",
-    ],
-    "not_covered": [
-        "Domain and web hosting / server (and its yearly cost)",
-        "All content: college info, courses, faculty, photos, prospectus & logo",
-        "Business email account, if required",
-        "Any paid plugin, stock media or third-party API",
-    ],
-}
-
-REQ_COLLEGE_WEB_ADMIN = {
-    "title": "Scope & requirements",
-    "left_label": "Delivered by Bhama Vision",
-    "right_label": "On client's side (third-party)",
-    "covered": [
-        "Complete, responsive website design & development of all pages",
-        "Admin panel to manage the site's content, with secure login",
+        "Complete, responsive front-end website design & development",
+        "Admin backend to manage the site's content, with secure login",
         "Database and all data models",
         "Enquiry / contact form, Google Map embed & basic on-page SEO",
         "Deployment to the client's hosting + handover, testing & bug fixing",
@@ -189,23 +169,21 @@ QUOTATIONS = [
     # ---------------------------------------------------------------- 1b
     {
         "id": "BV-Q-2026-CW1",
-        "package": "Informative Website",
+        "package": "Website + Backend",
         "title": "College Website",
-        "subtitle": "Multi-page informative college website (no admission portal)",
-        "price": 4999,
-        "price_note": "one-time (design & development) - price to confirm",
-        "timeline": "8-14 working days",
+        "subtitle": "College website with front-end and admin backend",
+        "price": 7999,
+        "price_note": "one-time (design & development)",
+        "timeline": "12-18 working days",
         "summary": (
-            "A complete, professional informative website for the college - "
-            "showcasing its programs, facilities, faculty, placements and "
-            "achievements. Admissions information (eligibility, fees, dates and "
-            "how to apply) is shown as content, without an online application "
-            "portal, applicant login or backend. Fully responsive across "
-            "mobile, tablet and desktop."
+            "A complete, professional college website with a modern, responsive "
+            "front-end and an admin backend, so the college can update its own "
+            "content - courses, faculty, news & notices, gallery and placements. "
+            "Fully responsive across mobile, tablet and desktop."
         ),
         "sections": [
             {
-                "heading": "Pages & sections",
+                "heading": "Website (front-end) pages",
                 "items": [
                     "Home: hero, highlights & quick links",
                     "About: history, vision & mission, leadership / management",
@@ -221,59 +199,7 @@ QUOTATIONS = [
                 ],
             },
             {
-                "heading": "Technical",
-                "items": [
-                    "Fully responsive across mobile, tablet & desktop",
-                    "Basic on-page SEO setup",
-                    "Deployment to the client's hosting + handover",
-                ],
-            },
-            {
-                "heading": "Not included in this package",
-                "muted": True,
-                "items": [
-                    "Online admission application portal & applicant login",
-                    "Online application-fee payment",
-                    "Admin backend for managing applications",
-                    "(All of the above are covered by the 'College Admission "
-                    "Portal' quotation.)",
-                ],
-            },
-        ],
-        "support": REQ_COLLEGE_WEB,
-    },
-    # ---------------------------------------------------------------- 1c
-    {
-        "id": "BV-Q-2026-CW2",
-        "package": "Website + Admin",
-        "title": "College Website",
-        "subtitle": "Informative college website + content admin panel (no admission portal)",
-        "price": 6999,
-        "price_note": "one-time (design & development) - price to confirm",
-        "timeline": "12-18 working days",
-        "summary": (
-            "The complete informative college website, plus a simple admin panel "
-            "so the college can update its own content - news & notices, events, "
-            "gallery, courses, faculty and placements - without any coding. There "
-            "is no online admission application portal or applicant login in this "
-            "package. Fully responsive across mobile, tablet and desktop."
-        ),
-        "sections": [
-            {
-                "heading": "Website pages & sections",
-                "items": [
-                    "Home: hero, highlights & quick links",
-                    "About: history, vision & mission, leadership / management",
-                    "Academics: courses / programs / departments with details",
-                    "Faculty & departments",
-                    "Facilities / infrastructure (labs, library, hostel, sports)",
-                    "Admissions info (content only): eligibility, fees & how to apply",
-                    "Placements & achievements",
-                    "Gallery, news / notices / events, and contact page",
-                ],
-            },
-            {
-                "heading": "Admin panel - college can manage",
+                "heading": "Admin panel (backend)",
                 "items": [
                     "Add / edit / remove news, notices & events",
                     "Manage gallery photos & albums",
@@ -285,25 +211,16 @@ QUOTATIONS = [
                 ],
             },
             {
-                "heading": "Not included in this package",
-                "muted": True,
-                "items": [
-                    "Online admission application portal & applicant login",
-                    "Online application-fee payment & applicant management",
-                    "(All of the above are covered by the 'College Admission "
-                    "Portal' quotation.)",
-                ],
-            },
-            {
                 "heading": "Technical",
                 "items": [
+                    "Secure authentication with role-based access",
                     "Fully responsive across mobile, tablet & desktop",
                     "Basic on-page SEO setup",
                     "Deployment to the client's hosting + handover",
                 ],
             },
         ],
-        "support": REQ_COLLEGE_WEB_ADMIN,
+        "support": REQ_COLLEGE_WEB,
     },
     # ---------------------------------------------------------------- 2
     {
