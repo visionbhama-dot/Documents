@@ -2,7 +2,7 @@
 Bhama Vision - additional quotations bundle.
 
   1. College Admission Portal (with backend)          -> Rs 14,000
-  2. Clothing Brand E-commerce (custom code)           -> Rs 18,000  (PLACEHOLDER - confirm)
+  2. Clothing Brand E-commerce (custom code)           -> Rs 12,999
   3. Connectify - Brand x Influencer matchmaking       -> Rs 3,499
 
 Build:  python3 build_more.py
@@ -152,8 +152,8 @@ QUOTATIONS = [
         "package": "Custom-Coded Store",
         "title": "Clothing Brand E-commerce",
         "subtitle": "Custom-coded online store + payment gateway + admin backend",
-        "price": 18000,
-        "price_note": "one-time (design & development) - price to confirm",
+        "price": 12999,
+        "price_note": "one-time (design & development)",
         "timeline": "25-35 working days",
         "summary": (
             "A fully custom-coded online store for a clothing brand - no template "
