@@ -1,7 +1,7 @@
 """
 Bhama Vision - additional quotations bundle.
 
-  1. College Admission Portal (with backend)          -> Rs 14,000
+  1. College Admission Portal (with backend)          -> Rs 9,999
   2. Clothing Brand E-commerce (custom code)           -> Rs 12,999
   3. Connectify - Brand x Influencer matchmaking       -> Rs 3,499
 
@@ -71,9 +71,9 @@ REQ_CONNECTIFY = {
     "left_label": "Delivered by Bhama Vision",
     "right_label": "On client's side (third-party)",
     "covered": [
-        "Complete UI/UX design & development (website + admin + basic dashboards)",
-        "Database and secure login for brands and influencers",
+        "Complete UI/UX design & development (website + admin panel)",
         "Registration forms for influencers and brands",
+        "Database to store all submissions securely",
         "Admin matchmaking tools and email notifications",
         "Deployment to the client's hosting + handover, testing & bug fixing",
     ],
@@ -93,7 +93,7 @@ QUOTATIONS = [
         "package": "With Backend & Admin",
         "title": "College Admission Portal",
         "subtitle": "Public website + online application portal + admin backend",
-        "price": 14000,
+        "price": 9999,
         "price_note": "one-time (design & development)",
         "timeline": "20-30 working days",
         "summary": (
@@ -239,7 +239,6 @@ QUOTATIONS = [
                 "items": [
                     "Register via a detailed form: niche, social handles, follower "
                     "counts, audience, content samples & collaboration rates",
-                    "Login and profile management",
                 ],
             },
             {
@@ -247,7 +246,6 @@ QUOTATIONS = [
                 "items": [
                     "Register via a form: brand details, campaign goals, target "
                     "niche and budget",
-                    "Login and profile management",
                 ],
             },
             {
@@ -260,10 +258,10 @@ QUOTATIONS = [
                 ],
             },
             {
-                "heading": "Dashboards & technical",
+                "heading": "Technical",
                 "items": [
-                    "Basic influencer & brand dashboards to view profile & matches",
-                    "Secure authentication and responsive design",
+                    "Secure admin authentication and role-based access",
+                    "Fully responsive across mobile, tablet & desktop",
                     "Deployment to the client's hosting + handover",
                 ],
             },
