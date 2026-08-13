@@ -2,6 +2,7 @@
 Bhama Vision - additional quotations bundle.
 
   1. College Admission Portal (with backend)          -> Rs 9,999
+  1b. College Website (informative, no admission portal) -> Rs 4,999  (PLACEHOLDER - confirm)
   2. Clothing Brand E-commerce (custom code)           -> Rs 12,999
   3. Connectify - Brand x Influencer matchmaking       -> Rs 3,499
 
@@ -42,6 +43,25 @@ REQ_COLLEGE = {
         "SMS / email (OTP & notifications) service subscription",
         "All content: college info, courses, fees, images and logo",
         "Any other paid API or plugin",
+    ],
+}
+
+REQ_COLLEGE_WEB = {
+    "title": "Scope & requirements",
+    "left_label": "Delivered by Bhama Vision",
+    "right_label": "On client's side (third-party)",
+    "covered": [
+        "Complete, responsive website design & development of all pages",
+        "Enquiry / contact form and Google Map embed",
+        "Basic on-page SEO setup",
+        "Deployment to the client's hosting + handover",
+        "Testing and bug fixing before launch",
+    ],
+    "not_covered": [
+        "Domain and web hosting / server (and its yearly cost)",
+        "All content: college info, courses, faculty, photos, prospectus & logo",
+        "Business email account, if required",
+        "Any paid plugin, stock media or third-party API",
     ],
 }
 
@@ -145,6 +165,62 @@ QUOTATIONS = [
             },
         ],
         "support": REQ_COLLEGE,
+    },
+    # ---------------------------------------------------------------- 1b
+    {
+        "id": "BV-Q-2026-CW1",
+        "package": "Informative Website",
+        "title": "College Website",
+        "subtitle": "Multi-page informative college website (no admission portal)",
+        "price": 4999,
+        "price_note": "one-time (design & development) - price to confirm",
+        "timeline": "8-14 working days",
+        "summary": (
+            "A complete, professional informative website for the college - "
+            "showcasing its programs, facilities, faculty, placements and "
+            "achievements. Admissions information (eligibility, fees, dates and "
+            "how to apply) is shown as content, without an online application "
+            "portal, applicant login or backend. Fully responsive across "
+            "mobile, tablet and desktop."
+        ),
+        "sections": [
+            {
+                "heading": "Pages & sections",
+                "items": [
+                    "Home: hero, highlights & quick links",
+                    "About: history, vision & mission, leadership / management",
+                    "Academics: courses / programs / departments with details",
+                    "Faculty & departments",
+                    "Facilities / infrastructure (labs, library, hostel, sports)",
+                    "Admissions info (content only): eligibility, fee structure, "
+                    "important dates & how to apply",
+                    "Placements & achievements",
+                    "Gallery: photos & events",
+                    "News / notices / events (display)",
+                    "Contact: enquiry form, map & phone",
+                ],
+            },
+            {
+                "heading": "Technical",
+                "items": [
+                    "Fully responsive across mobile, tablet & desktop",
+                    "Basic on-page SEO setup",
+                    "Deployment to the client's hosting + handover",
+                ],
+            },
+            {
+                "heading": "Not included in this package",
+                "muted": True,
+                "items": [
+                    "Online admission application portal & applicant login",
+                    "Online application-fee payment",
+                    "Admin backend for managing applications",
+                    "(All of the above are covered by the 'College Admission "
+                    "Portal' quotation.)",
+                ],
+            },
+        ],
+        "support": REQ_COLLEGE_WEB,
     },
     # ---------------------------------------------------------------- 2
     {
