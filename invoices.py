@@ -57,4 +57,23 @@ INVOICES = [
             },
         ],
     },
+    {
+        "id": "BV-INV-20260818-1400",
+        "client": {
+            "name": "Cladova & Phomi",
+            "lines": [],
+        },
+        "items": [
+            {
+                "desc": "Cladova - website edits",
+                "qty": 1,
+                "rate": 2500,
+            },
+            {
+                "desc": "Phomi - website edits",
+                "qty": 1,
+                "rate": 1000,
+            },
+        ],
+    },
 ]
