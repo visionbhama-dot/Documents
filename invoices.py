@@ -76,4 +76,23 @@ INVOICES = [
             },
         ],
     },
+    {
+        "id": "BV-INV-20260818-1600",
+        "client": {
+            "name": "Devarpan Trust",
+            "lines": [],
+        },
+        "items": [
+            {
+                "desc": "Website design charges",
+                "qty": 1,
+                "rate": 5900,
+            },
+            {
+                "desc": "Domain",
+                "qty": 1,
+                "rate": 1100,
+            },
+        ],
+    },
 ]
