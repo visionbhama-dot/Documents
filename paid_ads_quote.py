@@ -79,8 +79,8 @@ QUOTATIONS = [
                 "items": [
                     "Research first: audience, keyword & competitor research "
                     "before we launch",
-                    "Setup & management of 5 ad campaigns on your chosen "
-                    "platforms (e.g. Meta / Google)",
+                    "Setup & management of 5 ad campaigns on Meta "
+                    "(Facebook & Instagram)",
                     "5 custom static ad creatives (image / graphic ads) - "
                     "no videos in this package",
                     "Ongoing optimization every other day, or more often when "
