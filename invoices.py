@@ -85,6 +85,7 @@ INVOICES = [
         "items": [
             {
                 "desc": "Website design charges",
+                "detail": "Includes backend admin panel",
                 "qty": 1,
                 "rate": 5900,
             },
