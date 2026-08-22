@@ -91,6 +91,7 @@ INVOICES = [
             },
             {
                 "desc": "Domain",
+                "detail": "1 year",
                 "qty": 1,
                 "rate": 1100,
             },
