@@ -39,6 +39,7 @@ REQUIREMENTS = {
         "Admin backend to manage articles & pages",
         "Full on-page SEO options (editable per article)",
         "Google AdSense verification setup in the backend",
+        "Google Analytics integration from the backend",
         "Google Search Console setup & indexing",
         "Contact form with submissions in admin",
         "1 year support (errors & bug fixes)",
@@ -62,17 +63,17 @@ QUOTATIONS = [
         "package": "Blog Website + Admin",
         "title": "Fashion Blog Website",
         "subtitle": "Fashion articles website + admin, full SEO & AdSense verification",
-        "price": 3800,
+        "price": 4000,
         "price_note": "one-time (design & development)",
         "timeline": "6-10 working days",
         "summary": (
             "A clean, SEO-ready fashion blogging website where you publish "
             "fashion articles and grow an audience. It comes with an admin "
             "backend to write and manage articles and pages, full on-page SEO "
-            "options for every article, and Google AdSense verification set up "
-            "in the backend so you can start monetising once approved. The "
-            "package includes the 7 pages listed and 1 year of error & bug-fix "
-            "support."
+            "options for every article, Google AdSense verification set up in "
+            "the backend so you can start monetising once approved, and Google "
+            "Analytics integration to track your traffic. The package includes "
+            "the 7 pages listed and 1 year of error & bug-fix support."
         ),
         "sections": [
             {
@@ -96,6 +97,8 @@ QUOTATIONS = [
                     "slug",
                     "Google AdSense verification setup (site verification, "
                     "ads.txt & ad code placement)",
+                    "Google Analytics integration from the backend (add your "
+                    "tracking ID to start measuring traffic)",
                     "Manage page content (about, contact & legal pages)",
                     "View contact-form submissions",
                 ],
