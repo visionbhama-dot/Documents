@@ -115,4 +115,23 @@ INVOICES = [
         # Partial payment already received; balance due = 9,000 - 1,000.
         "paid": 1000,
     },
+    {
+        "id": "BV-INV-20260830-1400",
+        "client": {
+            "name": "YNC Global & Clads N Coverings",
+            "lines": [],
+        },
+        "items": [
+            {
+                "desc": "YNC Global Website",
+                "qty": 1,
+                "rate": 3500,
+            },
+            {
+                "desc": "Clads N Coverings Changes",
+                "qty": 1,
+                "rate": 2500,
+            },
+        ],
+    },
 ]
