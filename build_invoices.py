@@ -248,7 +248,18 @@ class Invoice:
             c.setFont("Noto-Sb", 10.5)
             c.drawRightString(self.right, self.y, rupee(tax))
             self.y -= 18
-        # Total due box
+        # Optional partial payment already received.
+        paid = self.inv.get("paid", 0)
+        balance = total - paid
+        if paid:
+            c.setFillColor(MUTED)
+            c.setFont("Noto-Md", 9.5)
+            c.drawString(lbl_x, self.y, "Amount paid")
+            c.setFillColor(INK)
+            c.setFont("Noto-Sb", 10.5)
+            c.drawRightString(self.right, self.y, "\u2212 " + rupee(paid))
+            self.y -= 18
+        # Balance / total due box
         box_h = 34
         box_x = lbl_x - 14
         box_w = self.right - box_x
@@ -258,10 +269,10 @@ class Invoice:
         cy = box_top - box_h / 2
         c.setFillColor(ON_YELLOW)
         c.setFont("Noto-Sb", 9.5)
-        c.drawString(box_x + 14, cy - 3, "TOTAL DUE")
+        c.drawString(box_x + 14, cy - 3, "BALANCE DUE" if paid else "TOTAL DUE")
         c.setFillColor(INK)
         c.setFont("Noto-Blk", 15)
-        c.drawRightString(self.right - 14, cy - 5, rupee(total))
+        c.drawRightString(self.right - 14, cy - 5, rupee(balance))
         self.y = box_top - box_h - 18
 
     def _payment_and_notes(self):

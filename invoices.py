@@ -97,4 +97,22 @@ INVOICES = [
             },
         ],
     },
+    {
+        "id": "BV-INV-20260830-1200",
+        "client": {
+            "name": "Northeast Advisor",
+            "lines": [],
+        },
+        "items": [
+            {
+                "desc": "Travel website + admin panel",
+                "detail": "Design & development, with WhatsApp integration "
+                          "& SEO (ref. quotation BV-Q-2026-008)",
+                "qty": 1,
+                "rate": 9000,
+            },
+        ],
+        # Partial payment already received; balance due = 9,000 - 1,000.
+        "paid": 1000,
+    },
 ]
