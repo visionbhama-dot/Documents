@@ -252,10 +252,17 @@ class Quote:
 
     def _price_box(self):
         q = self.q
-        self._ensure(96)
+        # Optional discount: when both `list_price` and `discount_percent`
+        # are given, `price` is treated as the final payable amount and an
+        # extra line shows the original price and the saving. Quotations
+        # without these keys render exactly as before.
+        list_price = q.get("list_price")
+        discount_pct = q.get("discount_percent")
+        has_discount = bool(list_price and discount_pct)
+        h = 96 if has_discount else 84
+        self._ensure(h + 16)
         self.y -= 6
         c = self.c
-        h = 84
         x, top = MARGIN, self.y
         on_yellow = HexColor("#6E6600")   # dark, readable text on yellow
         c.setFillColor(YELLOW)
@@ -284,13 +291,22 @@ class Quote:
         c.setFillColor(on_yellow)
         c.setFont("Noto", 8.5)
         c.drawString(x + 24, top - 62, "Delivery: " + q["timeline"])
-        # price
+        if has_discount:
+            save = int(list_price) - int(q["price"])
+            c.setFillColor(on_yellow)
+            c.setFont("Noto", 8.5)
+            c.drawString(
+                x + 24, top - 78,
+                "MRP {}  \u00b7  {}% off  \u00b7  you save {}".format(
+                    rupee(list_price), int(discount_pct), rupee(save)))
+        # price (final payable amount)
+        price_y = top - 44 if has_discount else top - 46
         c.setFillColor(INK)
         c.setFont("Noto-Blk", 30)
-        c.drawRightString(x + self.max_w - 24, top - 46, rupee(q["price"]))
+        c.drawRightString(x + self.max_w - 24, price_y, rupee(q["price"]))
         c.setFillColor(on_yellow)
         c.setFont("Noto", 8.5)
-        c.drawRightString(x + self.max_w - 24, top - 62, q["price_note"])
+        c.drawRightString(x + self.max_w - 24, price_y - 16, q["price_note"])
         self.y = top - h - 16
 
     # ---- intro block (top of first page) ----
