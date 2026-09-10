@@ -362,6 +362,56 @@ class Quote:
         c.line(MARGIN, self.y, PAGE_W - MARGIN, self.y)
         self.y -= 4
 
+    # ---- payment (optional QR) ----
+    def _payment_block(self):
+        # Renders a payment section with a UPI QR image when the active data
+        # module defines a `PAYMENT` dict. Quotes without it skip this block.
+        pay = getattr(data, "PAYMENT", None)
+        if not pay:
+            return
+        self._section_title("Payment", keep=140)
+        c = self.c
+        top = self.y
+        qr_size = 104
+        qr_file = pay.get("qr_image")
+        if qr_file:
+            img = ImageReader(os.path.join(ASSETS, qr_file))
+            iw, ih = img.getSize()
+            ratio = iw / ih
+            w, h = qr_size, qr_size / ratio
+            if h > qr_size:
+                h, w = qr_size, qr_size * ratio
+            self._ensure(qr_size + 6)
+            top = self.y
+            c.drawImage(img, MARGIN, top - qr_size, width=w, height=h,
+                        mask="auto")
+        tx = MARGIN + qr_size + 22
+        yy = top - 6
+        c.setFillColor(INK)
+        c.setFont("Noto-Sb", 11.5)
+        c.drawString(tx, yy, "Pay / advance via UPI")
+        yy -= 19
+        c.setFillColor(MUTED)
+        c.setFont("Noto", 9.5)
+        c.drawString(tx, yy, "Scan the QR with any UPI app to pay.")
+        yy -= 17
+        if pay.get("account_name"):
+            c.setFillColor(INK)
+            c.setFont("Noto-Sb", 10)
+            c.drawString(tx, yy, pay["account_name"])
+            yy -= 15
+        if pay.get("upi"):
+            c.setFillColor(MUTED)
+            c.setFont("Noto", 9.5)
+            c.drawString(tx, yy, "UPI: " + pay["upi"])
+            yy -= 15
+        if pay.get("bank"):
+            c.setFillColor(MUTED)
+            c.setFont("Noto", 9.5)
+            c.drawString(tx, yy, pay["bank"])
+            yy -= 15
+        self.y = min(top - qr_size, yy) - 16
+
     # ---- terms ----
     def _terms(self):
         self._section_title("Terms & next steps")
@@ -403,6 +453,8 @@ class Quote:
         # Pricing
         self._section_title("Investment", keep=150)
         self._price_box()
+        # Payment (optional UPI QR)
+        self._payment_block()
         # Terms
         self._terms()
 
