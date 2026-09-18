@@ -18,7 +18,7 @@ from quotations import COMPANY  # noqa: F401  (re-exported for the renderer)
 TERMS = {
     "notes": [
         "Amounts are in Indian Rupees (INR).",
-        "This receipt acknowledges the amount received in full as stated above.",
+        "This receipt acknowledges the amount received as stated above; any balance shown remains due.",
     ],
 }
 
@@ -36,5 +36,9 @@ RECEIPTS = [
         # Optional extras (leave as None / remove if not needed):
         "for": "app development",   # purpose of payment
         "mode": "Bank Transfer",    # payment method
+        # `total` marks this as a part payment: when total > amount the
+        # receipt shows the balance still due. Omit / set None for a full,
+        # standalone payment (then no balance is mentioned at all).
+        "total": 75000,
     },
 ]

@@ -203,6 +203,11 @@ class Receipt:
         ]
         if rc.get("mode"):
             meta.append(("Payment mode", rc["mode"]))
+        # Only surface a total / balance when this is a part payment.
+        total = rc.get("total")
+        if total and int(total) > int(rc["amount"]):
+            meta.append(("Total amount", rupee(total)))
+            meta.append(("Balance due", rupee(int(total) - int(rc["amount"]))))
         my = top
         lbl_x = self.right - 220
         for k, v in meta:
@@ -250,12 +255,22 @@ class Receipt:
         c.setFillColor(ON_YELLOW)
         c.setFont("Noto-Sb", 9)
         c.drawString(MARGIN + 24, top - 24, "AMOUNT RECEIVED")
-        c.setFillColor(ON_YELLOW)
-        c.setFont("Noto", 8.5)
-        c.drawString(MARGIN + 24, top - 40, "Received in full \u00b7 no balance due")
+        # Subtitle: mention the balance only when this is a part payment;
+        # for a full/standalone payment nothing extra is stated.
+        total = self.rc.get("total")
+        amount = int(self.rc["amount"])
+        subtitle = None
+        if total and int(total) > amount:
+            subtitle = "Part payment \u00b7 balance due {}".format(
+                rupee(int(total) - amount))
+        big_y = top - 38 if subtitle else top - 40
+        if subtitle:
+            c.setFillColor(ON_YELLOW)
+            c.setFont("Noto", 8.5)
+            c.drawString(MARGIN + 24, top - 40, subtitle)
         c.setFillColor(INK)
         c.setFont("Noto-Blk", 30)
-        c.drawRightString(self.right - 24, top - 38, rupee(self.rc["amount"]))
+        c.drawRightString(self.right - 24, big_y, rupee(self.rc["amount"]))
         self.y = top - box_h - 20
 
     def _payment_and_notes(self):
