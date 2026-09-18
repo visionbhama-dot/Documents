@@ -8,7 +8,11 @@ Seller/contact info is reused from quotations.py (COMPANY) and the bank
 details from invoices.py (PAYMENT) so there is a single source of truth.
 """
 from quotations import COMPANY  # noqa: F401  (re-exported for the renderer)
-from invoices import PAYMENT     # noqa: F401  (bank details we were paid to)
+
+# NOTE: no PAYMENT block here on purpose - this payment was received into a
+# different account, so bank details are intentionally omitted from the
+# receipt. Define a PAYMENT dict here (see invoices.py) if a future receipt
+# should show "Paid to" bank details.
 
 # Receipt-wide terms / notes.
 TERMS = {
