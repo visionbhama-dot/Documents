@@ -30,7 +30,7 @@ RECEIPTS = [
         },
         "amount": 30000,
         # Optional extras (leave as None / remove if not needed):
-        "for": None,          # e.g. "website development" - purpose of payment
-        "mode": None,         # e.g. "Bank transfer" / "UPI" / "Cheque"
+        "for": "app development",   # purpose of payment
+        "mode": "Bank Transfer",    # payment method
     },
 ]
