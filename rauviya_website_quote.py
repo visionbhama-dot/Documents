@@ -65,7 +65,7 @@ QUOTATIONS = [
         "package": "Luxury Website + Admin",
         "title": "RAUVIYA Luxury Catalog Website",
         "subtitle": "Category & product showcase with WhatsApp enquiry, plus a full admin panel",
-        "price": 16000,
+        "price": 3800,
         "price_note": "one-time (design & development)",
         "timeline": "15-22 working days",
         "summary": (
