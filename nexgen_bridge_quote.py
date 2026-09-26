@@ -67,7 +67,7 @@ QUOTATIONS = [
         "package": "Business Platform + Admin",
         "title": "NexGen Bridge Website",
         "subtitle": "Events, delegation trips, investors, partnerships & case studies with a full admin panel",
-        "price": 13000,
+        "price": 11000,
         "price_note": "one-time (design & development)",
         "timeline": "22-30 working days",
         "summary": (
