@@ -48,7 +48,6 @@ REQUIREMENTS = {
     ],
     "not_covered": [
         "Domain - arranged and paid by the client (not on our side)",
-        "Online payment / cart / checkout (enquiry-based only)",
         "Custom design editor / product customiser",
         "Product content, specs, photos & artwork (provided by the client)",
         "Live-order production / printing workflow or ERP integration",
