@@ -1,5 +1,5 @@
 """
-Bhama Vision - build the food-packaging B2B (10k) quotation PDF.
+Bhama Vision - build the food-packaging B2B (9k) quotation PDF.
 
 Reuses the existing quotation renderer in `build_quotes.py` but drives it
 with the content in `food_packaging_b2b_quote.py`, so the branded look

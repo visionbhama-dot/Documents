@@ -3,10 +3,9 @@ Bhama Vision - B2B food-packaging manufacturer website quotation content.
 
 A B2B website for a food-packaging items manufacturer (cups, plates,
 containers, etc.) with a backend to manage products, blogs and images.
-Enquiry-based only - NO online payment. Includes WhatsApp integration.
-Comes with free hosting and 1 year of bug & error support. The domain is
-arranged by the client (not on our side). Reuses the Bhama Vision
-quotation renderer:
+Enquiry-based with WhatsApp integration. Comes with free hosting and
+1 year of bug & error support. The domain is arranged by the client
+(not on our side). Reuses the Bhama Vision quotation renderer:
 
     python3 build_food_packaging_b2b_quote.py
 
@@ -40,7 +39,7 @@ REQUIREMENTS = {
     "covered": [
         "Responsive B2B website (frontend) + backend admin panel",
         "Product catalogue (cups, plates, containers, etc.) with specs",
-        "Enquiry / quote-request form (no online payment)",
+        "Enquiry / quote-request form",
         "WhatsApp integration (click-to-chat + enquiries to WhatsApp)",
         "Blog section managed from the backend",
         "Image / gallery management from the backend",
@@ -65,19 +64,18 @@ QUOTATIONS = [
         "package": "B2B Website + Backend",
         "title": "Food-Packaging B2B Website",
         "subtitle": "Manufacturer website with backend & enquiry forms",
-        "price": 10000,
+        "price": 9000,
         "price_note": "one-time (design & development)",
         "timeline": "20-28 working days",
         "summary": (
             "A professional B2B website for a food-packaging items "
             "manufacturer (cups, plates, containers and more) with a backend "
             "to manage products, blogs and images on your own. The site is "
-            "enquiry-based - there is NO online payment; instead, buyers send "
-            "a quote / enquiry that reaches you directly on WhatsApp and "
-            "email. It comes with a WhatsApp chat button, a free hosting plan "
-            "and 1 year of bug & error support. The domain is arranged by you "
-            "(it is not on our side), and we will help connect it to the "
-            "website."
+            "enquiry-based - buyers send a quote / enquiry that reaches you "
+            "directly on WhatsApp and email. It comes with a WhatsApp chat "
+            "button, a free hosting plan and 1 year of bug & error support. "
+            "The domain is arranged by you (it is not on our side), and we "
+            "will help connect it to the website."
         ),
         "sections": [
             {
@@ -89,7 +87,7 @@ QUOTATIONS = [
                     "Product detail pages with image gallery, materials & "
                     "minimum-order details",
                     "Enquiry / request-a-quote form (name, company, product, "
-                    "quantity, message) - no online payment",
+                    "quantity, message)",
                     "WhatsApp integration - click-to-chat button and enquiries "
                     "sent to your WhatsApp / email",
                     "Blog / news section to share updates and build trust",
@@ -131,7 +129,7 @@ TERMS = {
     "notes": [
         "All prices are in Indian Rupees (INR) and are one-time for the work quoted.",
         "The domain is not on our side - it is arranged and paid for by the client directly; we will help connect it to the website.",
-        "The website is enquiry-based only; online payment, cart and checkout are not included and can be quoted separately.",
+        "The website is enquiry-based; buyers submit quote requests that reach you on WhatsApp and email.",
         "The backend covers products, images, blogs and enquiries; ERP / production-workflow integrations are not included and can be quoted separately.",
         "1 year support covers bugs & errors only (things that stop working). It does not cover content changes, new products/features or redesigns.",
         "Hosting is provided on a free plan; upgrading to paid hosting (for higher traffic or needs) is optional and charged separately.",
