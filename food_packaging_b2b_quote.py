@@ -66,7 +66,7 @@ QUOTATIONS = [
         "subtitle": "Manufacturer website with backend & enquiry forms",
         "price": 9000,
         "price_note": "one-time (design & development)",
-        "timeline": "20-28 working days",
+        "timeline": "13-16 Oct 2026 (see delivery schedule)",
         "summary": (
             "A professional B2B website for a food-packaging items "
             "manufacturer (cups, plates, containers and more) with a backend "
@@ -107,6 +107,15 @@ QUOTATIONS = [
                     "Homepage banner management",
                     "A guided walkthrough and handover so your team is "
                     "comfortable using everything",
+                ],
+            },
+            {
+                "heading": "Delivery schedule",
+                "items": [
+                    "13 Oct 2026 - first look of the website delivered for "
+                    "your review",
+                    "14 Oct 2026 - backend admin panel delivered",
+                    "16 Oct 2026 - website finalised, tested & handed over",
                 ],
             },
         ],
