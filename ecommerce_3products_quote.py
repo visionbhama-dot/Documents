@@ -64,9 +64,9 @@ QUOTATIONS = [
     {
         "id": "BV-Q-2026-029",
         "package": "Online Store + Backend",
-        "title": "E-Commerce Website (3 Products)",
+        "title": "E-Commerce Website",
         "subtitle": "Online store with payment gateway, social media & analytics",
-        "price": 9000,
+        "price": 7000,
         "price_note": "one-time (design & development)",
         "timeline": "12-16 working days",
         "summary": (
