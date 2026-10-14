@@ -64,7 +64,7 @@ QUOTATIONS = [
         "package": "B2B Website + Backend",
         "title": "Food-Packaging B2B Website",
         "subtitle": "Manufacturer website with backend & enquiry forms",
-        "price": 9000,
+        "price": 6500,
         "price_note": "one-time (design & development)",
         "timeline": "13-16 Oct 2026 (see delivery schedule)",
         "summary": (
