@@ -6,13 +6,14 @@ Revision of the original WantX Complete Platform quotation
 demanding and time-consuming than first scoped, so the budget is revised
 upward by 30%:
 
-    Original agreed budget      75,000
+    Original (base) budget      75,000
     Revision (+30%)            +22,500
     Revised total               97,500   (excl. GST)
 
-    Already received           -30,000   (receipt: part payment)
-    Due now                     45,000 + 18% GST = 53,100
-    Balance on delivery         22,500 + 18% GST = 26,550
+    Received against base      -52,500   (30,000 + 22,500)
+    Final payment due now       45,000 + 18% GST = 53,100
+      = base balance            22,500
+      + revision                22,500
 
 Reuses the Bhama Vision quotation renderer:
 
@@ -29,15 +30,21 @@ UPLIFT_PERCENT = 30
 UPLIFT_AMOUNT = ORIGINAL_BUDGET * UPLIFT_PERCENT // 100       # 22,500
 REVISED_TOTAL = ORIGINAL_BUDGET + UPLIFT_AMOUNT               # 97,500
 
-ALREADY_RECEIVED = 30000
-DUE_NOW = 45000
+# Two part payments already received, both against the base price.
+RECEIVED_1 = 30000
+RECEIVED_2 = 22500
+ALREADY_RECEIVED = RECEIVED_1 + RECEIVED_2                    # 52,500
+
+# What is left: the unpaid part of the base price plus the revision.
+BASE_BALANCE = ORIGINAL_BUDGET - ALREADY_RECEIVED             # 22,500
+DUE_NOW = BASE_BALANCE + UPLIFT_AMOUNT                        # 45,000
+
 GST_PERCENT = 18
 GST_ON_DUE_NOW = DUE_NOW * GST_PERCENT // 100                 # 8,100
 PAYABLE_NOW = DUE_NOW + GST_ON_DUE_NOW                        # 53,100
 
-BALANCE_ON_DELIVERY = REVISED_TOTAL - ALREADY_RECEIVED - DUE_NOW   # 22,500
-GST_ON_BALANCE = BALANCE_ON_DELIVERY * GST_PERCENT // 100          # 4,050
-BALANCE_WITH_GST = BALANCE_ON_DELIVERY + GST_ON_BALANCE            # 26,550
+# This is the final payment - nothing remains after it.
+BALANCE_AFTER = REVISED_TOTAL - ALREADY_RECEIVED - DUE_NOW    # 0
 
 
 def _r(n):
@@ -119,10 +126,14 @@ QUOTATIONS = [
             "than the original estimate allowed for. We are therefore "
             "revising the budget upward by " + str(UPLIFT_PERCENT) + "%, "
             "taking the total to " + _r(REVISED_TOTAL) + " excluding GST. "
-            "Of this, " + _r(ALREADY_RECEIVED) + " has already been received. "
-            + _r(DUE_NOW) + " plus " + str(GST_PERCENT) + "% GST - "
-            + _r(PAYABLE_NOW) + " in total - is due now, and the remaining "
-            + _r(BALANCE_ON_DELIVERY) + " plus GST falls due on delivery. "
+            "Of this, " + _r(ALREADY_RECEIVED) + " has already been received "
+            "against the base price (" + _r(RECEIVED_1) + " plus "
+            + _r(RECEIVED_2) + "), leaving a final payment of "
+            + _r(DUE_NOW) + " - the " + _r(BASE_BALANCE) + " still "
+            "outstanding on the base price together with the "
+            + _r(UPLIFT_AMOUNT) + " revision. With "
+            + str(GST_PERCENT) + "% GST that comes to "
+            + _r(PAYABLE_NOW) + ", and it clears the project in full. "
             "The scope, deliverables and support commitment remain exactly as "
             "agreed; only the commercials and schedule change."
         ),
@@ -141,18 +152,21 @@ QUOTATIONS = [
                 ],
             },
             {
-                "heading": "Payment schedule & amount due now",
+                "heading": "Payment position & amount due now",
                 "items": [
-                    "Already received: " + _r(ALREADY_RECEIVED)
-                    + " (part payment, receipted)",
-                    "Due now: " + _r(DUE_NOW) + " + " + str(GST_PERCENT)
-                    + "% GST " + _r(GST_ON_DUE_NOW)
+                    "Received against the base price: "
+                    + _r(ALREADY_RECEIVED) + " (" + _r(RECEIVED_1) + " + "
+                    + _r(RECEIVED_2) + ", both receipted)",
+                    "Still outstanding on the base price: "
+                    + _r(BASE_BALANCE),
+                    "Plus the " + str(UPLIFT_PERCENT) + "% revision: "
+                    + _r(UPLIFT_AMOUNT),
+                    "Final payment due now: " + _r(DUE_NOW) + " + "
+                    + str(GST_PERCENT) + "% GST " + _r(GST_ON_DUE_NOW)
                     + " = " + _r(PAYABLE_NOW) + " payable",
-                    "Balance on delivery: " + _r(BALANCE_ON_DELIVERY) + " + "
-                    + str(GST_PERCENT) + "% GST " + _r(GST_ON_BALANCE)
-                    + " = " + _r(BALANCE_WITH_GST) + " payable",
-                    "Total payable across the project: " + _r(REVISED_TOTAL)
-                    + " plus GST as applicable",
+                    "This is the final payment - nothing further is due after "
+                    "it, and it takes the project to " + _r(REVISED_TOTAL)
+                    + " paid in full (excluding GST)",
                     "Payment can be made by bank transfer or UPI - details and "
                     "QR are on this quotation",
                 ],
@@ -228,10 +242,10 @@ PAYMENT = {
 TERMS = {
     "validity_days": 15,
     "payment": (
-        _r(ALREADY_RECEIVED) + " already received. " + _r(DUE_NOW) + " + "
-        + str(GST_PERCENT) + "% GST (" + _r(PAYABLE_NOW) + ") due now. "
-        "Balance " + _r(BALANCE_ON_DELIVERY) + " + GST ("
-        + _r(BALANCE_WITH_GST) + ") on delivery."
+        _r(ALREADY_RECEIVED) + " already received against the base price. "
+        "Final payment of " + _r(DUE_NOW) + " + " + str(GST_PERCENT)
+        + "% GST (" + _r(PAYABLE_NOW) + ") is due now, after which nothing "
+        "further is payable."
     ),
     "notes": [
         "This revised quotation supersedes quotation BV-Q-2026-WX1 of "
@@ -241,10 +255,14 @@ TERMS = {
         "engineering effort, paid infrastructure and an extended testing "
         "cycle on the work already agreed - it does not add new features to "
         "the scope.",
+        _r(ALREADY_RECEIVED) + " has been received against the base price ("
+        + _r(RECEIVED_1) + " plus " + _r(RECEIVED_2) + "). The final payment "
+        "of " + _r(DUE_NOW) + " is the " + _r(BASE_BALANCE) + " outstanding "
+        "on the base price plus the " + _r(UPLIFT_AMOUNT) + " revision.",
         "GST is charged at " + str(GST_PERCENT) + "% on each invoice raised "
         "against this quotation. " + _r(DUE_NOW) + " plus GST of "
         + _r(GST_ON_DUE_NOW) + ", i.e. " + _r(PAYABLE_NOW) + ", is payable "
-        "now.",
+        "now and completes the project payment.",
         "All amounts are in Indian Rupees (INR) and are one-time for the "
         "design & development work quoted.",
         "All third-party subscriptions (hosting, domain, AI/LLM API, Amazon "
