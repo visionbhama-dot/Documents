@@ -184,8 +184,6 @@ TERMS = {
     "notes": [
         "All prices are in Indian Rupees (INR) and are one-time for the work quoted.",
         "The domain is not on our side - it is arranged and paid for by the client directly; we will help connect it to the website.",
-        "This package covers up to {} categories and up to {} products; anything beyond that is added at a small charge.".format(
-            MAX_CATEGORIES, MAX_PRODUCTS),
         "Product photos, descriptions and company content are provided by the client.",
         "Enquiries reach you by email and WhatsApp; an admin panel to add and edit products yourself is available as an add-on and is quoted separately.",
         "Timelines begin once the content, logo and advance payment are received.",
