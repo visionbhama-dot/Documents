@@ -72,7 +72,7 @@ QUOTATIONS = [
         "package": "Travel Website + Admin",
         "title": "Travel Website + Admin (Lead Capture + SEO)",
         "subtitle": "Tour & travel website with admin panel, lead capture & SEO - plus an optional monthly management plan",
-        "price": 9000,
+        "price": 12000,
         "price_note": "one-time development  (+  \u20b93,000 / month website management)",
         "timeline": "12-16 working days",
         "summary": (
@@ -184,7 +184,7 @@ TERMS = {
     "payment": "Development: 40% advance to start, 30% midway, 30% on delivery. "
                "Monthly management: \u20b93,000 / month, payable in advance.",
     "notes": [
-        "All prices are in Indian Rupees (INR). \u20b99,000 is a one-time development fee for the website & admin panel.",
+        "All prices are in Indian Rupees (INR). \u20b912,000 is a one-time development fee for the website & admin panel.",
         "The monthly website-management plan is \u20b93,000 / month and is optional; it is billed in advance and only while active - you can start or pause it anytime.",
         "The monthly plan covers adding {} new tour packages each month with on-page SEO, plus content upkeep; additional packages or pages beyond this are quoted separately.".format(PACKAGES_PER_MONTH),
         "Domain and hosting are arranged and paid for by the client directly; we will help set them up and connect them.",
