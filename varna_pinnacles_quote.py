@@ -3,8 +3,9 @@ Bhama Vision - Varna Pinnacles digital-services website quotation content.
 
 A modern, responsive website for Varna Pinnacles (a digital-services company)
 with an easy-to-use admin panel to manage content - images, services,
-portfolio, blog, testimonials - and to view enquiry leads. Domain and hosting
-are arranged by the client (not included in this package).
+portfolio, blog, testimonials - and to view enquiry leads. Hosting for the
+first year is free from our side; the domain is arranged by the client (not
+included in this package).
 
 Reuses the Bhama Vision quotation renderer:
 
@@ -29,7 +30,7 @@ COMPANY = {
 CLIENT = {
     "name": "Prospective Client",
     "company": "Varna Pinnacles",
-    "note": "Digital-services website design with admin panel (domain not included)",
+    "note": "Website design with admin panel (free hosting 1 year, domain not included)",
 }
 
 # Clear includes / excludes shown as two columns on the quotation.
@@ -39,6 +40,7 @@ REQUIREMENTS = {
     "right_label": "Not included",
     "covered": [
         "Modern, responsive website for digital services",
+        "Free hosting for 1 year (from our side)",
         "Admin panel to manage website content",
         "Manage all images across the site",
         "Services & portfolio management (add / edit)",
@@ -48,11 +50,11 @@ REQUIREMENTS = {
     ],
     "not_covered": [
         "Domain (arranged & paid by the client)",
-        "Hosting (arranged & paid by the client)",
         "Content, images & copywriting (provided by the client)",
         "Logo / brand identity design (separate service)",
         "Online store / payment gateway features",
         "Ongoing SEO or ad campaigns & any paid plugin / API",
+        "Hosting renewal from year 2 onwards",
     ],
 }
 
@@ -63,10 +65,10 @@ QUOTATIONS = [
     {
         "id": "BV-Q-2026-037",
         "package": "Website + Admin",
-        "title": "Varna Pinnacles Digital-Services Website",
-        "subtitle": "Website design with an admin panel to manage content & enquiry leads (domain not included)",
+        "title": "Varna Pinnacles",
+        "subtitle": "Website design with an admin panel to manage content & enquiry leads (free hosting for 1 year, domain not included)",
         "price": 4800,
-        "price_note": "one-time (design & development)",
+        "price_note": "one-time (incl. free hosting for 1 year)",
         "timeline": "10-15 working days",
         "summary": (
             "A clean, modern and responsive website for Varna Pinnacles to "
@@ -76,8 +78,8 @@ QUOTATIONS = [
             "change images, update services and portfolio, publish blogs and "
             "manage testimonials - all without touching code. Every enquiry "
             "sent through the site lands in a leads inbox you can view any "
-            "time. Domain and hosting are arranged by you; we help set them "
-            "up."
+            "time. Hosting for the first year is free from our side; you only "
+            "arrange the domain, and we help set it up."
         ),
         "sections": [
             {
@@ -117,7 +119,8 @@ TERMS = {
     "payment": "40% advance to start, 60% on delivery (or as mutually agreed).",
     "notes": [
         "All prices are in Indian Rupees (INR) and are one-time for the work quoted.",
-        "Domain and hosting are NOT included; they are arranged and paid for by the client directly. We will help set them up.",
+        "Hosting for the first year is free from our side (included). Renewal from year 2 onwards is billed separately at actuals.",
+        "Domain is NOT included; it is arranged and paid for by the client directly. We will help set it up.",
         "Content, images, blog articles, portfolio items, client logos and testimonials are added by the client via the admin panel.",
         "Enquiry leads are captured and shown in the admin panel; email / SMS delivery of leads can be added on request.",
         "Online store / payment gateway is a separate scope.",
