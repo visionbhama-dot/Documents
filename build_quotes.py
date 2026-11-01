@@ -196,25 +196,28 @@ class Quote:
             self.y -= gap
 
     def _support_block(self, support):
-        self._section_title(support["title"], keep=200)
         c = self.c
         col_gap = 24
         col_w = (self.max_w - col_gap) / 2
-        # measure height needed
-        self._ensure(150)
+        # Measure the real height of the taller card first, so the heading
+        # and the cards are kept together and the block moves to a new page
+        # when it would otherwise run off the bottom.
+        h1 = self._card_height(support["covered"], col_w)
+        h2 = self._card_height(support["not_covered"], col_w)
+        need = max(h1, h2)
+        self._section_title(support["title"], keep=need + 70)
+        self._ensure(need + 16)
         top = self.y
         # Left / highlighted card
         left_label = support.get("left_label", "Covered")
         right_label = support.get("right_label", "Not covered")
         self._two_col_card(MARGIN, top, col_w, left_label,
                            support["covered"], YELLOW, INK)
-        h1 = self._card_height(support["covered"], col_w)
         # Right / muted card
         self._two_col_card(MARGIN + col_w + col_gap, top, col_w,
                            right_label, support["not_covered"],
                            HexColor("#C9C9C9"), MUTED)
-        h2 = self._card_height(support["not_covered"], col_w)
-        self.y = top - max(h1, h2) - 14
+        self.y = top - need - 14
 
     def _card_height(self, items, col_w):
         pad, head, size, leading, gap = 14, 22, 9.5, 12.5, 6
