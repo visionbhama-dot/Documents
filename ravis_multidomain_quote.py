@@ -6,10 +6,9 @@ jbsolar.in), each with its own dynamic CMS backend, domain + zero-loss email
 migration, WhatsApp integration, an AI chatbot / lead assistant, and a
 modern Vercel + Supabase hosting stack for a fast, responsive experience.
 
-Pricing: base price per website is Rs. 15,000. jbsolar.in is the more
-complex build (project gallery, video integration, detailed solar product
-pages) so it is priced at Rs. 17,000 (+Rs. 2,000). Total development is the
-sum of the three. AI usage and hosting are third-party recurring costs.
+Pricing is shown as a per-website breakdown, totalling Rs. 47,000 one-time
+for all three websites and their CMS backends. AI usage and hosting are
+third-party recurring costs.
 
 Reuses the Bhama Vision quotation renderer:
 
@@ -89,7 +88,7 @@ QUOTATIONS = [
         "title": "Ravis Enterprises - Multi-Domain Website Project",
         "subtitle": "3 dynamic websites + 3 CMS backends, migration, WhatsApp & AI integration on a Vercel + Supabase stack",
         "price": TOTAL_DEV,
-        "price_note": "one-time development - 3 websites + 3 CMS backends (AI usage & hosting are third-party)",
+        "price_note": "one-time development",
         "timeline": "4-6 weeks (all three sites)",
         "summary": (
             "A complete, long-term build for your three business domains - "
@@ -134,7 +133,7 @@ QUOTATIONS = [
                 ],
             },
             {
-                "heading": "jbsolar.in - JB Solar (most complex build)",
+                "heading": "jbsolar.in - JB Solar",
                 "items": [
                     "Lead-generation-focused layout for residential "
                     "(PM Surya Ghar), commercial & off-grid clients",
@@ -145,8 +144,6 @@ QUOTATIONS = [
                     "subsidy schemes)",
                     "Dynamic CMS backend + strong enquiry / subsidy lead "
                     "forms",
-                    "This site is priced higher ({}) for the added "
-                    "complexity.".format(_r(PRICE_JBSOLAR)),
                 ],
             },
             {
@@ -217,7 +214,7 @@ QUOTATIONS = [
                     "jbpower.in - power electronics website + CMS backend: "
                     "{}".format(_r(PRICE_JBPOWER)),
                     "jbsolar.in - solar website + CMS backend (gallery, "
-                    "video, detailed product pages - more complex): "
+                    "video, detailed product pages): "
                     "{}".format(_r(PRICE_JBSOLAR)),
                     "Each website price includes its CMS backend, WhatsApp "
                     "widget + lead notifications, AI chatbot integration, "
@@ -251,8 +248,8 @@ TERMS = {
     "payment": "40% advance to start, 30% at midway, 30% on delivery (or as mutually agreed).",
     "notes": [
         "All prices are in Indian Rupees (INR) and are one-time for the design & development work quoted.",
-        "Base price per website is {}. jbsolar.in is a more complex build (project gallery, video, detailed product pages) and is priced at {} (+{}). Total one-time development is {} for all three websites and their CMS backends.".format(
-            _r(BASE_PRICE), _r(PRICE_JBSOLAR), _r(COMPLEX_UPLIFT), _r(TOTAL_DEV)),
+        "Website development is quoted per website as shown in the price breakdown; the total one-time development for all three websites and their CMS backends is {}.".format(
+            _r(TOTAL_DEV)),
         "AI chatbot / lead assistant integration is included; the AI usage / API is a third-party cost billed directly by the AI provider based on usage.",
         "Hosting uses Vercel + Supabase for speed and scalability; their paid tiers are third-party costs billed by the providers on the client's account. A unified host (Hostinger or similar) can be used instead on request.",
         "Domain renewal, Google Workspace / email subscriptions and any official WhatsApp Business API provider fees are paid by the client directly.",
