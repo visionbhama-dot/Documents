@@ -318,10 +318,15 @@ class Quote:
         c.setFont("Noto-Xb", 10)
         c.drawString(MARGIN, self.y, "QUOTATION")
         self.y -= 30
-        # Title
+        # Title - wraps onto multiple lines so a long title never runs off
+        # the page (short titles stay on a single line, unchanged).
         c.setFillColor(INK)
         c.setFont("Noto-Blk", 30)
-        c.drawString(MARGIN, self.y, q["title"])
+        title_lines = self._wrap(q["title"], "Noto-Blk", 30, self.max_w)
+        for i, ln in enumerate(title_lines):
+            c.drawString(MARGIN, self.y, ln)
+            if i < len(title_lines) - 1:
+                self.y -= 32
         self.y -= 23
         # Package + subtitle
         c.setFillColor(INK)
