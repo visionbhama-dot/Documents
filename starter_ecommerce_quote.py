@@ -68,7 +68,7 @@ QUOTATIONS = [
         "package": "Starter Store + Admin",
         "title": "Starter E-Commerce Website",
         "subtitle": "Affordable online store with payment gateway integration & a basic admin panel (domain & hosting not included)",
-        "price": 6000,
+        "price": 5000,
         "price_note": "one-time (design & development)",
         "timeline": "8-12 working days",
         "summary": (
