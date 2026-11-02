@@ -41,3 +41,34 @@ Each quotation has a content module plus a thin `build_*.py` that swaps
 `build_quotes.data` and calls `build_quotes.build()`. Rebuild the PDF and
 commit it with the content change. `reportlab` and `pillow` are required
 (see `requirements.txt`).
+
+## Generating a quotation from a chat command
+
+The user prefers to create quotations by typing a plain-English command in
+chat (not by running a terminal themselves). When the user's message is a
+quotation request (describes a website/store with details like product
+count, price, payment, admin, domain, hosting, a reference site), treat the
+message text as the command and build it with the quote bot:
+
+```sh
+python3 quote_gen.py "<the user's command, verbatim>"
+```
+
+`quote_gen.py` parses the command, fills the quotation template, auto-assigns
+the next `BV-Q-2026-NNN` id and renders the PDF to `output/` using the shared
+`build_quotes.py` renderer. Steps:
+
+1. Run it with `--dry-run` first only if the request is ambiguous, to confirm
+   the parsed fields; otherwise build directly.
+2. If no price is detected, ask the user for the amount before building.
+3. Defaults when a detail is omitted: payment and admin are included; domain
+   and hosting are client-arranged (not included). State any default you
+   applied so the user can correct it.
+4. Commit the new content/PDF and open+merge a PR as usual (never commit the
+   `.venv/` — it is gitignored).
+
+`reportlab`/`pillow` are required; if the shared renderer can't find the Noto
+Sans fonts, `quote_gen.py` already falls back to other common font paths.
+
+For a niche the bot doesn't know, add it to the `NICHES` list in
+`quote_gen.py` (about six lines) rather than hand-writing a one-off module.
