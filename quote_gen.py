@@ -55,7 +55,10 @@ PAYMENT = {
 }
 
 # Make the Noto Sans fonts resolve on whatever machine this runs on.
+# The bundled copy in assets/fonts is tried first so the app is fully
+# self-contained on free hosting (Streamlit Cloud, Hugging Face Spaces, ...).
 for _fd in (
+    os.path.join(HERE, "assets", "fonts"),
     build_quotes.FONT_DIR,
     "/inner_container/usr/share/fonts/google-noto",
     "/usr/share/fonts/google-noto",

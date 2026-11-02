@@ -106,3 +106,17 @@ What it understands in a command:
 The next `BV-Q-2026-NNN` id is picked automatically by scanning the repo, and
 the PDF is written to `output/`. To add or tweak a niche, edit the `NICHES`
 list in `quote_gen.py`.
+
+## Web chat app (free hosting, shareable link)
+
+`app.py` is a browser chat box around the quote bot: type a command, get a
+PDF to download — same offline engine, no paid AI/API. The Noto fonts are
+bundled in `assets/fonts/`, so it runs on any host.
+
+```bash
+pip install -r requirements.txt
+streamlit run app.py
+```
+
+To put it online for free with a public link (Streamlit Community Cloud or
+Hugging Face Spaces), follow **[DEPLOY.md](DEPLOY.md)**.
