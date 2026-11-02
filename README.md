@@ -69,3 +69,40 @@ issues). It does **not** cover content changes, new features or redesigns.
 
 Fonts use Noto Sans (system font). If they aren't found, adjust `FONT_DIR` in
 `build_quotes.py` / `assets/make_logo.py`.
+
+## Quote bot — generate quotations from a chat command
+
+`quote_gen.py` builds a full, branded quotation PDF from one plain-English
+command, in seconds. It uses the same renderer (`build_quotes.py`) as the
+hand-written quotes, so the look is identical. **No external AI/API is used —
+it runs fully offline.** It reads the command, extracts the details and fills
+the quotation template, then auto-assigns the next `BV-Q` number.
+
+```bash
+# one-shot: pass the command as an argument
+python3 quote_gen.py "jewellery ecommerce 40 products payment integration no domain with hosting admin panel 8k"
+
+# see what it parsed, without building
+python3 quote_gen.py --dry-run "ecommerce 25 products payment admin 8k ref lukaoriginals.com"
+
+# interactive chat mode: type commands at a prompt (quit/exit to leave)
+python3 quote_gen.py
+```
+
+What it understands in a command:
+
+| Detail | Say it like | Default if omitted |
+| --- | --- | --- |
+| Niche | `jewellery`, `apparel`, `perfume`, `grocery`, `optical`, `footwear`, `beauty`, `electronics`, `furniture`, `food` | generic "E-Commerce" |
+| Products | `25 products`, `40 product listings` | 20 |
+| Price | `8k`, `rs 8000`, `₹6,000` | none (warns) |
+| Payment | `payment integration` / `no payment` | included |
+| Admin | `admin` / `backend` / `no admin` | included |
+| Domain | `with domain` / `no domain` | client arranges |
+| Hosting | `with hosting` / `no hosting` | client arranges |
+| Support | `1 year support` | none |
+| Reference site | `reference lukaoriginals.com` | none |
+
+The next `BV-Q-2026-NNN` id is picked automatically by scanning the repo, and
+the PDF is written to `output/`. To add or tweak a niche, edit the `NICHES`
+list in `quote_gen.py`.
