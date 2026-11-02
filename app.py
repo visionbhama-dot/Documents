@@ -15,6 +15,7 @@ Run locally:
 Then open the URL it prints (default http://localhost:8501).
 """
 import os
+import traceback
 
 import streamlit as st
 
@@ -25,7 +26,7 @@ st.set_page_config(page_title="Bhama Vision - Quotation Maker", page_icon="📝"
 EXAMPLES = [
     "jewellery ecommerce 40 products payment integration no domain with hosting admin 8k",
     "apparel ecommerce 25 products payment admin 8k reference lukaoriginals.com",
-    "perfume ecommerce 30 products payment integration admin no domain with hosting 7k",
+    "home decor catalog 30 products no payment admin with hosting 7k",
 ]
 
 st.title("📝 Bhama Vision — Quotation Maker")
@@ -42,7 +43,8 @@ with st.expander("How to write the command (click for examples)"):
         "beauty, electronics, furniture, food (or leave blank for generic)\n"
         "- Products: `25 products`\n"
         "- Price: `8k` or `rs 8000` or `₹6,000`\n"
-        "- Payment: `payment integration` / `no payment`\n"
+        "- Payment: `payment integration` / `no payment` "
+        "(no payment → enquiry & WhatsApp-order store)\n"
         "- Admin: `admin` / `no admin`\n"
         "- Domain: `with domain` / `no domain`\n"
         "- Hosting: `with hosting` / `no hosting`\n"
@@ -52,12 +54,71 @@ with st.expander("How to write the command (click for examples)"):
     for ex in EXAMPLES:
         st.code(ex, language=None)
 
-# Chat history lives in the session.
+# ---- session state ----
 if "history" not in st.session_state:
-    st.session_state.history = []  # list of dicts: role, text, pdf(bytes), pdf_name
+    # each item: {role, text, pdf(bytes|None), pdf_name(str|None)}
+    st.session_state.history = []
+if "seq" not in st.session_state:
+    st.session_state.seq = 0  # per-session counter → unique quote numbers
 
-# Replay history.
-for msg in st.session_state.history:
+
+def _make_quote(command):
+    """Parse + build one quote; returns an assistant history item."""
+    slots = quote_gen.parse_command(command)
+
+    if slots["price"] is None:
+        return {
+            "role": "assistant",
+            "text": ("I couldn't find a **price** in that. Add the amount, "
+                     "e.g. `8k` or `rs 8000`, and send it again."),
+            "pdf": None, "pdf_name": None,
+        }
+
+    # Unique id per generation so filenames/keys never clash in a session.
+    st.session_state.seq += 1
+    qid = "BV-Q-2026-{:03d}".format(
+        quote_gen.highest_quote_number() + st.session_state.seq)
+
+    data = quote_gen.build_quote_data(slots, quote_id=qid)
+    quote_gen.build_quotes.data = data
+    outputs = quote_gen.build_quotes.build()
+    path = outputs[0]
+    with open(path, "rb") as fh:
+        pdf_bytes = fh.read()
+    q = data.QUOTATIONS[0]
+    text = (
+        "Done ✅ **{title}**\n\n"
+        "- Quotation no.: `{id}`\n"
+        "- Price: ₹{price:,} ({note})\n"
+        "- Timeline: {timeline}\n\n"
+        "Here's what I understood:\n```\n{parsed}\n```"
+    ).format(
+        title=q["title"], id=q["id"], price=q["price"], note=q["price_note"],
+        timeline=q["timeline"], parsed=quote_gen.summarize(slots),
+    )
+    return {
+        "role": "assistant", "text": text,
+        "pdf": pdf_bytes, "pdf_name": os.path.basename(path),
+    }
+
+
+# ---- handle new input BEFORE rendering, then render once ----
+command = st.chat_input("e.g. jewellery ecommerce 40 products payment admin with hosting 8k")
+if command:
+    st.session_state.history.append({
+        "role": "user", "text": command, "pdf": None, "pdf_name": None})
+    try:
+        st.session_state.history.append(_make_quote(command))
+    except Exception:
+        st.session_state.history.append({
+            "role": "assistant",
+            "text": "⚠️ Sorry, I couldn't build that one. Try rephrasing the "
+                    "command.\n\n```\n{}\n```".format(traceback.format_exc()),
+            "pdf": None, "pdf_name": None,
+        })
+
+# Single render path — unique key per message index, so no duplicate-key error.
+for i, msg in enumerate(st.session_state.history):
     with st.chat_message(msg["role"]):
         st.markdown(msg["text"])
         if msg.get("pdf"):
@@ -66,55 +127,5 @@ for msg in st.session_state.history:
                 data=msg["pdf"],
                 file_name=msg["pdf_name"],
                 mime="application/pdf",
-                key="dl-" + msg["pdf_name"],
+                key="dl-{}".format(i),
             )
-
-command = st.chat_input("e.g. jewellery ecommerce 40 products payment admin with hosting 8k")
-
-if command:
-    st.session_state.history.append({"role": "user", "text": command})
-    with st.chat_message("user"):
-        st.markdown(command)
-
-    with st.chat_message("assistant"):
-        slots = quote_gen.parse_command(command)
-
-        if slots["price"] is None:
-            reply = (
-                "I couldn't find a **price** in that. Add the amount, e.g. "
-                "`8k` or `rs 8000`, and send it again."
-            )
-            st.markdown(reply)
-            st.session_state.history.append({"role": "assistant", "text": reply})
-        else:
-            data = quote_gen.build_quote_data(slots)
-            quote_gen.build_quotes.data = data
-            outputs = quote_gen.build_quotes.build()
-            path = outputs[0]
-            with open(path, "rb") as fh:
-                pdf_bytes = fh.read()
-            q = data.QUOTATIONS[0]
-            reply = (
-                "Done ✅ **{title}**\n\n"
-                "- Quotation no.: `{id}`\n"
-                "- Price: ₹{price:,} ({note})\n"
-                "- Timeline: {timeline}\n\n"
-                "Here's what I understood:\n```\n{parsed}\n```"
-            ).format(
-                title=q["title"], id=q["id"], price=q["price"],
-                note=q["price_note"], timeline=q["timeline"],
-                parsed=quote_gen.summarize(slots),
-            )
-            st.markdown(reply)
-            pdf_name = os.path.basename(path)
-            st.download_button(
-                "⬇️ Download PDF",
-                data=pdf_bytes,
-                file_name=pdf_name,
-                mime="application/pdf",
-                key="dl-" + pdf_name,
-            )
-            st.session_state.history.append({
-                "role": "assistant", "text": reply,
-                "pdf": pdf_bytes, "pdf_name": pdf_name,
-            })

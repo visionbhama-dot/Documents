@@ -239,8 +239,8 @@ def parse_command(command):
 # ---------------------------------------------------------------------------
 # ID assignment
 # ---------------------------------------------------------------------------
-def next_quote_id():
-    """Scan the repo for the highest BV-Q-2026-NNN and return the next one."""
+def highest_quote_number():
+    """Return the highest BV-Q-2026-NNN number found in the repo (int)."""
     highest = 0
     for fn in os.listdir(HERE):
         if not fn.endswith(".py"):
@@ -252,7 +252,12 @@ def next_quote_id():
             continue
         for num in re.findall(r"BV-Q-2026-(\d{3})", body):
             highest = max(highest, int(num))
-    return "BV-Q-2026-{:03d}".format(highest + 1)
+    return highest
+
+
+def next_quote_id(offset=1):
+    """Return the next BV-Q-2026-NNN id (highest found + offset)."""
+    return "BV-Q-2026-{:03d}".format(highest_quote_number() + offset)
 
 
 # ---------------------------------------------------------------------------
@@ -269,7 +274,7 @@ class _QuoteData:
         self.QUOTATIONS = quotations
 
 
-def build_quote_data(slots):
+def build_quote_data(slots, quote_id=None):
     niche = slots["niche"]
     n = slots["products"] or 20
     price = slots["price"] or 0
@@ -307,7 +312,9 @@ def build_quote_data(slots):
     ]
     if slots["payment"]:
         covered.append("Payment gateway integration (UPI / cards / net-banking / wallets)")
-    covered.append("Cart, secure checkout & Cash on Delivery")
+        covered.append("Cart, secure checkout & Cash on Delivery")
+    else:
+        covered.append("Cart & enquiry-based ordering over WhatsApp & email")
     if slots["admin"]:
         covered.append("Backend to manage products, orders & customers")
     covered.append("WhatsApp integration (click-to-chat button)")
@@ -338,9 +345,15 @@ def build_quote_data(slots):
     }
 
     # ---- summary ----
-    pay_phrase = ("an integrated payment gateway (UPI / cards / net-banking / "
-                  "wallets) or Cash on Delivery" if slots["payment"]
-                  else "Cash on Delivery")
+    if slots["payment"]:
+        order_sentence = (
+            "Customers browse your products, add them to the cart and check out "
+            "securely with an integrated payment gateway (UPI / cards / "
+            "net-banking / wallets) or Cash on Delivery.")
+    else:
+        order_sentence = (
+            "Customers browse your products and place an order by sending you an "
+            "enquiry over WhatsApp or email, so every lead reaches you directly.")
     admin_phrase = (" A backend admin panel lets you manage products, orders "
                     "and customers from one dashboard." if slots["admin"] else "")
     ref_phrase = (" The design takes cues from {}.".format(slots["reference"])
@@ -350,9 +363,8 @@ def build_quote_data(slots):
                         "and we will help set them up.")
     summary = (
         "A clean, ready-to-launch {} for a single seller with up to {} product "
-        "listings. Customers browse your products, add them to the cart and "
-        "check out securely with {}.{}{}{}".format(
-            niche["noun"], n, pay_phrase, admin_phrase, ref_phrase, host_phrase)
+        "listings. {}{}{}{}".format(
+            niche["noun"], n, order_sentence, admin_phrase, ref_phrase, host_phrase)
     )
 
     # ---- sections ----
@@ -362,8 +374,19 @@ def build_quote_data(slots):
         "Product listing with search, sort & category filters",
         "Product detail page with image gallery, {} & price".format(niche["variants"]),
         "Up to {} product listings set up with photos, price and details".format(n),
-        "Add to cart and smooth, secure checkout",
-        "Order placement with order confirmation to you & the customer",
+    ]
+    if slots["payment"]:
+        frontend += [
+            "Add to cart and smooth, secure checkout",
+            "Order placement with order confirmation to you & the customer",
+        ]
+    else:
+        frontend += [
+            "Add to cart / build an enquiry list",
+            "Place an order by sending an enquiry over WhatsApp & email",
+            "Enquiry / order-request form that reaches you directly",
+        ]
+    frontend += [
         "WhatsApp click-to-chat button for quick enquiries",
         "Content pages: about, contact and policy pages",
         "Fully responsive across mobile, tablet & desktop",
@@ -412,7 +435,7 @@ def build_quote_data(slots):
     })
 
     quote = {
-        "id": next_quote_id(),
+        "id": quote_id or next_quote_id(),
         "package": package,
         "title": title,
         "subtitle": subtitle,
