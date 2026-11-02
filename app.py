@@ -25,8 +25,9 @@ st.set_page_config(page_title="Bhama Vision - Quotation Maker", page_icon="📝"
 
 EXAMPLES = [
     "jewellery ecommerce 40 products payment integration no domain with hosting admin 8k",
-    "apparel ecommerce 25 products payment admin 8k reference lukaoriginals.com",
-    "home decor catalog 30 products no payment admin with hosting 7k",
+    "travel website 50 packages with admin panel 1 year support 12k",
+    "real estate website 60 properties admin seo with hosting 15k",
+    "business website services admin enquiry 7k",
 ]
 
 st.title("📝 Bhama Vision — Quotation Maker")
@@ -37,15 +38,18 @@ st.caption(
 
 with st.expander("How to write the command (click for examples)"):
     st.markdown(
-        "Mention the **niche**, **number of products**, **price** and which "
-        "features you want. Order and punctuation don't matter.\n\n"
-        "- Niche: jewellery, apparel, perfume, grocery, optical, footwear, "
-        "beauty, electronics, furniture, food (or leave blank for generic)\n"
-        "- Products: `25 products`\n"
+        "Mention the **type of website**, **how many items**, the **price** and "
+        "which features you want. Order and punctuation don't matter.\n\n"
+        "- Type: e-commerce store (jewellery, apparel, perfume, grocery, "
+        "optical, footwear, etc.), travel, real estate, news, blog, business / "
+        "services, rental, recruitment, restaurant, portfolio, or a plain website\n"
+        "- Items: `25 products`, `50 packages`, `60 properties`, `40 posts`, "
+        "`20 vehicles`, `100 jobs` …\n"
         "- Price: `8k` or `rs 8000` or `₹6,000`\n"
         "- Payment: `payment integration` / `no payment` "
-        "(no payment → enquiry & WhatsApp-order store)\n"
+        "(stores default to payment; other sites default to enquiry)\n"
         "- Admin: `admin` / `no admin`\n"
+        "- SEO: `seo` / `adsense`\n"
         "- Domain: `with domain` / `no domain`\n"
         "- Hosting: `with hosting` / `no hosting`\n"
         "- Support: `1 year support`\n"
