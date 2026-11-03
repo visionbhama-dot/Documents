@@ -387,7 +387,11 @@ def parse_command(command):
 # ID assignment
 # ---------------------------------------------------------------------------
 def highest_quote_number():
-    """Return the highest BV-Q-2026-NNN number found in the repo (int)."""
+    """Return the highest BV-Q-2026-NNN number found in the repo (int).
+
+    Scans both the content modules (*.py) and already-generated PDFs in
+    output/, so each newly committed quote gets a fresh, unique number.
+    """
     highest = 0
     for fn in os.listdir(HERE):
         if not fn.endswith(".py"):
@@ -399,6 +403,11 @@ def highest_quote_number():
             continue
         for num in re.findall(r"BV-Q-2026-(\d{3})", body):
             highest = max(highest, int(num))
+    out_dir = os.path.join(HERE, "output")
+    if os.path.isdir(out_dir):
+        for fn in os.listdir(out_dir):
+            for num in re.findall(r"BV-Q-2026-(\d{3})", fn):
+                highest = max(highest, int(num))
     return highest
 
 
@@ -585,8 +594,12 @@ def _build_store(slots, quote_id):
     not_covered += [
         "Product photos & content (provided by the client)",
         "Products beyond {} (added at a small per-product charge)".format(n),
-        "SMS / email / OTP service subscription & SEO / marketing",
     ]
+    if slots["seo"]:
+        not_covered.append("SMS / email / OTP service subscription")
+        not_covered.append("Advanced SEO / marketing campaigns (separate service)")
+    else:
+        not_covered.append("SMS / email / OTP service subscription & SEO / marketing")
 
     order_sentence = _ORDER_SUMMARY[ordering].format(items="products")
     admin_phrase = (" A backend admin panel lets you manage products, orders and "
