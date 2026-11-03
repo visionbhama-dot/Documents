@@ -338,6 +338,21 @@ def parse_command(command):
     seo = _flag(text, ["seo", "search engine", "google ranking", "adsense",
                        "analytics"], [])
 
+    # Optional blog / articles section and an image gallery.
+    blog = _flag(text, ["blog", "blogs", "article section", "articles section",
+                        "news section"], ["no blog"])
+    gallery = _flag(text, ["gallery", "image", "images", "photo", "photos"],
+                    ["no gallery"])
+
+    # Whether to talk about the domain at all. "do not mention domain" etc.
+    # suppresses every domain line (neither included nor excluded).
+    mention_domain = True
+    for p in ["do not mention", "don't mention", "dont mention", "no mention",
+              "without mentioning", "skip domain", "not mention"]:
+        if p in text and "domain" in text:
+            mention_domain = False
+            break
+
     support_years = None
     m = re.search(r"(\d+)\s*year", text)
     if m:
@@ -375,8 +390,11 @@ def parse_command(command):
         "payment": payment_default if payment is None else payment,
         "admin": admin_default if admin is None else admin,
         "domain": False if domain is None else domain,
+        "mention_domain": mention_domain,
         "hosting": False if hosting is None else hosting,
         "seo": (cfg["seo"] if (seo is None and kind == "site") else bool(seo)),
+        "blog": bool(blog),
+        "gallery": bool(gallery),
         "support_years": support_years,
         "reference": reference,
         "raw": command.strip(),
@@ -437,12 +455,16 @@ def _timeline(n):
         "12-16 working days" if n <= 30 else "14-18 working days")
 
 
-def _delivery_section(hosting, seo):
+def _delivery_section(hosting, seo, mention_domain=True):
     seo_line = ("Full on-page SEO - titles, meta, sitemap & clean URLs"
                 if seo else
                 "Basic on-page SEO - titles, meta descriptions & clean URLs")
-    last = ("Hosting included; deployment and help connecting your domain"
-            if hosting else "Deployment and help connecting your domain & hosting")
+    if mention_domain:
+        last = ("Hosting included; deployment and help connecting your domain"
+                if hosting else "Deployment and help connecting your domain & hosting")
+    else:
+        last = ("Hosting included; deployment and launch" if hosting
+                else "Deployment and launch of the website")
     return {
         "heading": "Design, SEO & delivery",
         "items": [
@@ -461,13 +483,14 @@ def _terms(slots, item_word):
     if slots["reference"]:
         notes.append("{} is used only as a style / layout reference; this is a "
                      "custom build and not a copy of that site.".format(slots["reference"]))
-    if not slots["domain"] and not slots["hosting"]:
-        notes.append("Domain and hosting are NOT included; they are arranged and "
-                     "paid for by the client directly. We will help set them up and "
-                     "connect them.")
-    elif not slots["domain"]:
-        notes.append("The domain is NOT included; it is arranged and paid for by the "
-                     "client directly. We will help connect it.")
+    if slots.get("mention_domain", True):
+        if not slots["domain"] and not slots["hosting"]:
+            notes.append("Domain and hosting are NOT included; they are arranged and "
+                         "paid for by the client directly. We will help set them up and "
+                         "connect them.")
+        elif not slots["domain"]:
+            notes.append("The domain is NOT included; it is arranged and paid for by the "
+                         "client directly. We will help connect it.")
     if slots["hosting"]:
         notes.append("Hosting is included. Renewal / upgrading to higher plans after "
                      "the first term is optional and charged separately.")
@@ -537,9 +560,36 @@ def _features_subtitle(slots, payment_label):
         bits.append("backend admin panel")
     if slots["seo"]:
         bits.append("SEO setup")
+    if slots.get("blog"):
+        bits.append("blog")
     if slots["hosting"]:
         bits.append("hosting")
     return bits
+
+
+def _blog_gallery_bits(slots):
+    """Extra (covered, frontend, admin) bullets for the blog & gallery add-ons."""
+    cov, front, adm = [], [], []
+    if slots.get("blog"):
+        cov.append("Blog / articles section" +
+                   (" (admin-managed)" if slots["admin"] else ""))
+        front.append("Blog / articles section with featured posts & images")
+        adm.append("Write, edit & publish blog posts with images")
+    if slots.get("gallery"):
+        cov.append("Image gallery / media section")
+        front.append("Image gallery with lightbox")
+        adm.append("Manage gallery images")
+    return cov, front, adm
+
+
+def _host_phrase(slots):
+    """Closing sentence about hosting/domain, honouring 'don't mention domain'."""
+    if slots["hosting"]:
+        return " Hosting is included."
+    if slots.get("mention_domain", True):
+        return (" Domain and hosting are arranged by you (not included), and we "
+                "will help set them up.")
+    return " Hosting is arranged by you (not included)."
 
 
 def _build_store(slots, quote_id):
@@ -561,12 +611,13 @@ def _build_store(slots, quote_id):
     subtitle_bits = _features_subtitle(slots, "payment integration")
     subtitle = (niche["noun"].capitalize() + (" with " + ", ".join(subtitle_bits)
                 if subtitle_bits else ""))
-    if not slots["domain"]:
+    if not slots["domain"] and slots.get("mention_domain", True):
         subtitle += " (domain not included)"
     if slots["reference"]:
         subtitle += " - style reference: {}".format(slots["reference"])
 
     ordering = "cart" if slots["payment"] else "enquiry"
+    cov_extra, front_extra, adm_extra = _blog_gallery_bits(slots)
 
     covered = [
         "Responsive {} (frontend)".format(niche["noun"]) +
@@ -578,6 +629,7 @@ def _build_store(slots, quote_id):
     covered.append(_ORDER_COVERED[ordering])
     if slots["admin"]:
         covered.append("Backend to manage products, orders & customers")
+    covered += cov_extra
     covered.append("WhatsApp integration (click-to-chat button)")
     if slots["hosting"]:
         covered.append("Hosting - included")
@@ -585,7 +637,7 @@ def _build_store(slots, quote_id):
         covered.append("{} year bug & error support".format(slots["support_years"]))
 
     not_covered = []
-    if not slots["domain"]:
+    if not slots["domain"] and slots.get("mention_domain", True):
         not_covered.append("Domain - arranged and paid by the client (not included)")
     if not slots["hosting"]:
         not_covered.append("Hosting - arranged and paid by the client (not included)")
@@ -606,9 +658,7 @@ def _build_store(slots, quote_id):
                     "customers from one dashboard." if slots["admin"] else "")
     ref_phrase = (" The design takes cues from {}.".format(slots["reference"])
                   if slots["reference"] else "")
-    host_phrase = (" Hosting is included." if slots["hosting"]
-                   else " Domain and hosting are arranged by you (not included), and "
-                        "we will help set them up.")
+    host_phrase = _host_phrase(slots)
     summary = ("A clean, ready-to-launch {} for a single seller with up to {} product "
                "listings. {}{}{}{}".format(
                    niche["noun"], n, order_sentence, admin_phrase, ref_phrase, host_phrase))
@@ -621,6 +671,7 @@ def _build_store(slots, quote_id):
         "Up to {} product listings set up with photos, price and details".format(n),
     ]
     frontend += _ORDER_FRONTEND[ordering]
+    frontend += front_extra
     frontend += [
         "WhatsApp click-to-chat button for quick enquiries",
         "Content pages: about, contact and policy pages",
@@ -640,20 +691,21 @@ def _build_store(slots, quote_id):
             ],
         })
     if slots["admin"]:
-        sections.append({
-            "heading": "Backend admin panel",
-            "items": [
-                "Secure admin login for the store owner",
-                "Add, edit and remove products, collections & variants",
-                "Upload product photos and set price, stock and status",
-                "Order management - view orders and update status "
-                "(new / shipped / delivered)",
-                "Basic customer list and enquiries",
-                "Homepage banner & featured-collection management",
-                "A short walkthrough so you are comfortable running the store",
-            ],
-        })
-    sections.append(_delivery_section(slots["hosting"], slots["seo"]))
+        admin_items = [
+            "Secure admin login for the store owner",
+            "Add, edit and remove products, collections & variants",
+            "Upload product photos and set price, stock and status",
+            "Order management - view orders and update status "
+            "(new / shipped / delivered)",
+            "Basic customer list and enquiries",
+        ]
+        admin_items += adm_extra
+        admin_items += [
+            "Homepage banner & featured-collection management",
+            "A short walkthrough so you are comfortable running the store",
+        ]
+        sections.append({"heading": "Backend admin panel", "items": admin_items})
+    sections.append(_delivery_section(slots["hosting"], slots["seo"], slots.get("mention_domain", True)))
 
     quote = {
         "id": quote_id or next_quote_id(),
@@ -699,10 +751,12 @@ def _build_site(slots, quote_id):
                 (" with " + ", ".join(subtitle_bits) if subtitle_bits else ""))
     if n:
         subtitle += " ({} {})".format(n, count_label.lower())
-    if not slots["domain"]:
+    if not slots["domain"] and slots.get("mention_domain", True):
         subtitle += " (domain not included)"
     if slots["reference"]:
         subtitle += " - style reference: {}".format(slots["reference"])
+
+    cov_extra, front_extra, adm_extra = _blog_gallery_bits(slots)
 
     # ---- summary ----
     order_sentence = _ORDER_SUMMARY[ordering].format(items=item)
@@ -710,14 +764,15 @@ def _build_site(slots, quote_id):
                     "dashboard.".format(cfg["admin_manage"]) if admin else "")
     pay_phrase = (" Online payment is integrated for advances / bookings."
                   if slots["payment"] else "")
+    blog_phrase = (" A blog / articles section keeps your content fresh."
+                   if slots.get("blog") else "")
     ref_phrase = (" The design takes cues from {}.".format(slots["reference"])
                   if slots["reference"] else "")
-    host_phrase = (" Hosting is included." if slots["hosting"]
-                   else " Domain and hosting are arranged by you (not included), and "
-                        "we will help set them up.")
+    host_phrase = _host_phrase(slots)
     lead = ("A clean, ready-to-launch {}".format(cfg["noun"]) +
             (" with up to {} {}".format(n, item) if n else "") + ". ")
-    summary = lead + order_sentence + admin_phrase + pay_phrase + ref_phrase + host_phrase
+    summary = (lead + order_sentence + admin_phrase + pay_phrase + blog_phrase +
+               ref_phrase + host_phrase)
 
     # ---- frontend section ----
     frontend = ["Home page with hero banner, highlights & clear calls-to-action"]
@@ -725,6 +780,7 @@ def _build_site(slots, quote_id):
     if n:
         frontend.append("Up to {} {} set up with images & details".format(n, item))
     frontend += _ORDER_FRONTEND[ordering]
+    frontend += front_extra
     frontend += [
         "Content pages: about, contact and policy pages",
         "Fully responsive across mobile, tablet & desktop",
@@ -752,13 +808,14 @@ def _build_site(slots, quote_id):
             admin_items.append("Create, publish & schedule posts")
         else:
             admin_items.append("View and manage enquiries / leads")
+        admin_items += adm_extra
         admin_items += [
             "Homepage banner & highlights management",
             "A short walkthrough so you are comfortable running it",
         ]
         sections.append({"heading": "Backend admin panel", "items": admin_items})
 
-    sections.append(_delivery_section(slots["hosting"], slots["seo"]))
+    sections.append(_delivery_section(slots["hosting"], slots["seo"], slots.get("mention_domain", True)))
 
     # ---- includes / excludes ----
     covered = ["Responsive {} (frontend)".format(cfg["noun"]) +
@@ -770,6 +827,7 @@ def _build_site(slots, quote_id):
     covered.append(_ORDER_COVERED[ordering])
     if admin:
         covered.append("Backend to manage {}".format(cfg["admin_manage"]))
+    covered += cov_extra
     covered.append("WhatsApp integration (click-to-chat button)")
     if slots["seo"]:
         covered.append("On-page SEO setup (titles, meta, sitemap)")
@@ -779,7 +837,7 @@ def _build_site(slots, quote_id):
         covered.append("{} year bug & error support".format(slots["support_years"]))
 
     not_covered = []
-    if not slots["domain"]:
+    if not slots["domain"] and slots.get("mention_domain", True):
         not_covered.append("Domain - arranged and paid by the client (not included)")
     if not slots["hosting"]:
         not_covered.append("Hosting - arranged and paid by the client (not included)")
@@ -834,6 +892,10 @@ def summarize(slots):
     items = "none"
     if slots["count"]:
         items = "{} {}".format(slots["count"], (slots["count_word"] or "").lower())
+    if not slots.get("mention_domain", True):
+        domain = "not mentioned"
+    else:
+        domain = "included" if slots["domain"] else "client arranges"
     return (
         "  Type       : {}\n"
         "  Items      : {}\n"
@@ -841,6 +903,7 @@ def summarize(slots):
         "  Payment    : {}\n"
         "  Admin panel: {}\n"
         "  SEO        : {}\n"
+        "  Blog       : {}\n"
         "  Domain     : {}\n"
         "  Hosting    : {}\n"
         "  Support    : {}\n"
@@ -851,7 +914,8 @@ def summarize(slots):
             yn(slots["payment"]),
             yn(slots["admin"]),
             yn(slots["seo"]),
-            "included" if slots["domain"] else "client arranges",
+            yn(slots.get("blog")),
+            domain,
             "included" if slots["hosting"] else "client arranges",
             "{} year".format(slots["support_years"]) if slots["support_years"] else "none",
             slots["reference"] or "none",
