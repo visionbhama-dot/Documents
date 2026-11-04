@@ -222,6 +222,20 @@ SITE_TYPES = [
         ],
     },
     {
+        "keys": ["healthcare", "health care", "medical", "clinic", "hospital",
+                 "doctor", "dental", "dentist", "pharmacy", "diagnostic",
+                 "wellness", "physiotherap", "ayurved"],
+        "title": "Healthcare Website", "package": "Healthcare Website",
+        "noun": "healthcare website", "item": "services",
+        "count_word": "Services", "ordering": "leads", "seo": True,
+        "admin_manage": "services, doctors & appointment enquiries",
+        "frontend_extra": [
+            "Services / departments with detail pages",
+            "Doctors / team profiles with specialities",
+            "Appointment / enquiry request form",
+        ],
+    },
+    {
         "keys": ["business", "corporate", "company", "agency", "consult",
                  "digital services", "service website", "services website",
                  "manufacturer", "b2b", "startup"],
