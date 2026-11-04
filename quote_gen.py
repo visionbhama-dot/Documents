@@ -343,6 +343,9 @@ def parse_command(command):
                         "news section"], ["no blog"])
     gallery = _flag(text, ["gallery", "image", "images", "photo", "photos"],
                     ["no gallery"])
+    delivery = _flag(text, ["delivery", "home delivery", "doorstep",
+                            "delivery management"],
+                     ["no delivery", "pickup only", "self pickup"])
 
     # Whether to talk about the domain at all. "do not mention domain" etc.
     # suppresses every domain line (neither included nor excluded).
@@ -395,6 +398,7 @@ def parse_command(command):
         "seo": (cfg["seo"] if (seo is None and kind == "site") else bool(seo)),
         "blog": bool(blog),
         "gallery": bool(gallery),
+        "delivery": bool(delivery),
         "support_years": support_years,
         "reference": reference,
         "raw": command.strip(),
@@ -558,6 +562,8 @@ def _features_subtitle(slots, payment_label):
         bits.append(payment_label)
     if slots["admin"]:
         bits.append("backend admin panel")
+    if slots.get("delivery"):
+        bits.append("delivery management")
     if slots["seo"]:
         bits.append("SEO setup")
     if slots.get("blog"):
@@ -568,8 +574,13 @@ def _features_subtitle(slots, payment_label):
 
 
 def _blog_gallery_bits(slots):
-    """Extra (covered, frontend, admin) bullets for the blog & gallery add-ons."""
+    """Extra (covered, frontend, admin) bullets for optional add-ons:
+    blog / articles, image gallery and delivery management."""
     cov, front, adm = [], [], []
+    if slots.get("delivery"):
+        cov.append("Delivery options - delivery areas, slots & charges")
+        front.append("Delivery area / pincode check with delivery charges at checkout")
+        adm.append("Manage delivery areas, slots & charges; track deliveries")
     if slots.get("blog"):
         cov.append("Blog / articles section" +
                    (" (admin-managed)" if slots["admin"] else ""))
@@ -904,6 +915,7 @@ def summarize(slots):
         "  Admin panel: {}\n"
         "  SEO        : {}\n"
         "  Blog       : {}\n"
+        "  Delivery   : {}\n"
         "  Domain     : {}\n"
         "  Hosting    : {}\n"
         "  Support    : {}\n"
@@ -915,6 +927,7 @@ def summarize(slots):
             yn(slots["admin"]),
             yn(slots["seo"]),
             yn(slots.get("blog")),
+            yn(slots.get("delivery")),
             domain,
             "included" if slots["hosting"] else "client arranges",
             "{} year".format(slots["support_years"]) if slots["support_years"] else "none",
