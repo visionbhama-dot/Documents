@@ -47,8 +47,8 @@ REQUIREMENTS = {
         "1 year support for any bugs & errors",
     ],
     "not_covered": [
-        "Domain - arranged and paid by the client (not included)",
-        "Hosting renewal from year 2 onwards",
+        "Domain - client's (approx \u20b91,000-\u20b91,500 / year)",
+        "Hosting renewal from year 2 (approx \u20b91,500 / year)",
         "Online payments / consultation booking & payment gateway (add-on)",
         "Content, images & copywriting (provided by the client)",
         "Logo / brand identity design (separate service)",
@@ -144,8 +144,9 @@ TERMS = {
     "payment": "50% advance to start, 50% on delivery (or as mutually agreed).",
     "notes": [
         "All prices are in Indian Rupees (INR) and are one-time for the design & development work quoted.",
-        "Hosting for the first year is free from our side (with SSL). Renewal from year 2 onwards is billed separately at actuals.",
+        "Hosting for the first year is free from our side (with SSL).",
         "The domain is NOT included - it is arranged and paid for by the client directly; we will help connect it to the website.",
+        "Next-year renewal (from year 2 onwards), paid by the client at actuals: domain approx \u20b91,000-\u20b91,500 / year and hosting approx \u20b91,500 / year.",
         "Content, images and copywriting are provided by the client and can be managed via the admin panel.",
         "1 year support covers bugs & errors only (things that stop working). It does not cover content changes, new pages / features or redesigns.",
         "Online payments / consultation booking and a payment gateway are available as an add-on and quoted separately.",
