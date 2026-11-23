@@ -65,7 +65,7 @@ QUOTATIONS = [
         "package": "Website + Admin",
         "title": "Astrology Website",
         "subtitle": "Responsive astrology website with an admin panel, free hosting for 1 year & 1 year bug & error support (domain not included)",
-        "price": 6000,
+        "price": 4500,
         "price_note": "one-time (incl. free hosting for 1 year)",
         "timeline": "7-10 working days",
         "summary": (
