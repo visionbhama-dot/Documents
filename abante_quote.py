@@ -28,7 +28,7 @@ COMPANY = {
 # Client the quotation is prepared for.
 CLIENT = {
     "name": "Prospective Client",
-    "company": "Abante Integrated",
+    "company": "Abante Integrated Management Services Pvt Ltd",
     "note": "Facility & asset management website + admin panel (free hosting 1 year, domain not included)",
 }
 
