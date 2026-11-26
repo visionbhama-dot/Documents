@@ -65,7 +65,7 @@ QUOTATIONS = [
         "package": "Website + Admin",
         "title": "Abante Integrated Management Services",
         "subtitle": "Corporate facility & asset management website with an admin panel, full SEO, free hosting for 1 year & 1 year support (domain not included)",
-        "price": 22000,
+        "price": 50000,
         "price_note": "one-time (incl. free hosting for 1 year)",
         "timeline": "7-15 working days",
         "summary": (
