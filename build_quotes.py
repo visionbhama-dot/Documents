@@ -357,23 +357,36 @@ class Quote:
         c.line(MARGIN, self.y, PAGE_W - MARGIN, self.y)
         self.y -= 16
         colw = self.max_w / 4
+        vfont, vsize, vlead = "Noto-Sb", 10.5, 13
+        avail = colw - 8
+        # Wrap each value within its column (up to 4 lines) so a long value -
+        # e.g. a full company name in "Prepared for" - is shown in an
+        # organised, multi-line way instead of overflowing the page. Short
+        # values stay on a single line exactly as before.
+        col_lines = []
+        for (k, v) in meta:
+            lines = self._wrap(v, vfont, vsize, avail)
+            if len(lines) > 4:
+                lines = lines[:4]
+                last = lines[-1]
+                while last and pdfmetrics.stringWidth(
+                        last + "\u2026", vfont, vsize) > avail:
+                    last = last[:-1]
+                lines[-1] = last.rstrip() + "\u2026"
+            col_lines.append(lines)
+        max_lines = max(len(ls) for ls in col_lines)
         for i, (k, v) in enumerate(meta):
             cx = MARGIN + i * colw
             c.setFillColor(MUTED)
             c.setFont("Noto-Md", 8)
             c.drawString(cx, self.y, k.upper())
             c.setFillColor(INK)
-            c.setFont("Noto-Sb", 10.5)
-            # Ellipsize the value so a long one (e.g. a long company name in
-            # "Prepared for") never runs off the edge of its column.
-            val, avail = v, colw - 8
-            if pdfmetrics.stringWidth(val, "Noto-Sb", 10.5) > avail:
-                while val and pdfmetrics.stringWidth(
-                        val + "\u2026", "Noto-Sb", 10.5) > avail:
-                    val = val[:-1]
-                val = val.rstrip() + "\u2026"
-            c.drawString(cx, self.y - 15, val)
-        self.y -= 15 + 16
+            c.setFont(vfont, vsize)
+            yy = self.y - 15
+            for ln in col_lines[i]:
+                c.drawString(cx, yy, ln)
+                yy -= vlead
+        self.y -= 15 + (max_lines - 1) * vlead + 16
         c.setStrokeColor(LINE)
         c.line(MARGIN, self.y, PAGE_W - MARGIN, self.y)
         self.y -= 4
