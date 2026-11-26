@@ -364,7 +364,15 @@ class Quote:
             c.drawString(cx, self.y, k.upper())
             c.setFillColor(INK)
             c.setFont("Noto-Sb", 10.5)
-            c.drawString(cx, self.y - 15, v)
+            # Ellipsize the value so a long one (e.g. a long company name in
+            # "Prepared for") never runs off the edge of its column.
+            val, avail = v, colw - 8
+            if pdfmetrics.stringWidth(val, "Noto-Sb", 10.5) > avail:
+                while val and pdfmetrics.stringWidth(
+                        val + "\u2026", "Noto-Sb", 10.5) > avail:
+                    val = val[:-1]
+                val = val.rstrip() + "\u2026"
+            c.drawString(cx, self.y - 15, val)
         self.y -= 15 + 16
         c.setStrokeColor(LINE)
         c.line(MARGIN, self.y, PAGE_W - MARGIN, self.y)
