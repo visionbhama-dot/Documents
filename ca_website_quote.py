@@ -70,7 +70,7 @@ QUOTATIONS = [
         "package": "Corporate CA Website + Admin & Portal",
         "title": "ABHISEKH CHATURVEDI & CO. Website",
         "subtitle": "Premium 6-page CA & business advisory website with admin panel, client portal & lead management",
-        "price": 5800,
+        "price": 6800,
         "price_note": "one-time (design & development)",
         "timeline": "5-7 working days",
         "summary": (
