@@ -72,7 +72,7 @@ QUOTATIONS = [
         "subtitle": "Premium 6-page CA & business advisory website with admin panel, client portal & lead management",
         "price": 5800,
         "price_note": "one-time (design & development)",
-        "timeline": "25-35 working days",
+        "timeline": "5-7 working days",
         "summary": (
             "A premium, corporate website that positions ABHISEKH CHATURVEDI "
             "& CO. as a complete Chartered Accountancy and business-advisory "
